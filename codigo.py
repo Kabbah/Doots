@@ -9,23 +9,12 @@ import xml.dom.minidom
 
 dom = parse("marvel_simplificado.xml")
 universe = dom.documentElement
+heroAttributes = ['name', 'popularity', 'alignment', 'gender', 'height_m', 'weight_kg', 'hometown', 'intelligence', 'strength', 'speed', 'durability', 'energy_Projection', 'fighting_Skills']
+
 heroes = universe.getElementsByTagName("hero")
 for hero in heroes:
-    print "%s" % hero.getAttribute("id"),
-    print ", %s" % hero.getElementsByTagName("name")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("popularity")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("alignment")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("gender")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("height_m")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("weight_kg")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("hometown")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("intelligence")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("strength")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("speed")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("durability")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("energy_Projection")[0].childNodes[0].data,
-    print ", %s" % hero.getElementsByTagName("fighting_Skills")[0].childNodes[0].data
-
+    for attr in heroAttributes:
+        print(hero.getElementByTagName(attr)[0].childNodes[0].data, end = ', ')
 
 
 
