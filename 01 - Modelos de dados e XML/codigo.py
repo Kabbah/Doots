@@ -13,8 +13,10 @@ heroAttributes = ['name', 'popularity', 'alignment', 'gender', 'height_m', 'weig
 
 heroes = universe.getElementsByTagName("hero")
 for hero in heroes:
+    print(hero.getAttribute("id"), end = "")
     for attr in heroAttributes:
-        print(hero.getElementByTagName(attr)[0].childNodes[0].data, end = ', ')
+        print(", %s" % hero.getElementsByTagName(attr)[0].childNodes[0].data, end = "")
+    print("")
 
 
 
