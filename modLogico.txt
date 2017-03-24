@@ -1,0 +1,37 @@
+Usuário(*login*, nomeCompleto, cidadeNatal)
+UsuarioConhece(*loginSujeito*, *loginConhecido*)
+	loginSujeito -> Usuário
+	loginConhecido -> Usuário
+UsuarioBloqueia(*loginSujeito*, *loginBloqueado*, razãoSpam, razãoAbusivo, razãoPessoal, razãoOutra)
+	loginSujeito -> Usuário
+	loginConhecido -> Usuário
+
+ArtistaCinema(*id*, endereço, telefone)
+Filme(*id*, nome, dataLançamento, idDiretor)
+    idDiretor -> ArtistaCinema
+AtorFilme(*idFilme*, *idAtor*)
+    idFilme -> Filme
+    idAtor -> ArtistaCinema
+
+Categoria(*id*, nome, idSupercategoria)
+    idSupercategoria -> Categoria
+ClassificaçãoFilme(*idFilme*, *idCategoria*)
+    idFilme -> Filme
+    idCategoria -> Categoria
+
+CurtirFilme(*login*, *idFilme*, nota)
+    login -> Usuário
+    idFilme -> Filme
+
+ArtistaMusical(*id*, país, gênero, nomeArtístico)
+Banda(*id*, nome)
+    id -> ArtistaMusical
+Músico(*nomeReal*,dataNascimento, estiloMusical, idBanda)
+    idBanda -> Banda
+Cantor(*id*, *nomeMusico*)
+    id -> ArtistaMusical
+    nomeMusico -> Musico
+
+CurtirArtistaMusical(*login*,*idArtistaMusical*,nota)
+    login -> Usuário
+    idArtistaMusical -> ArtistaMusical
