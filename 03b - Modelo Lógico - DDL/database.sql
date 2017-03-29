@@ -91,7 +91,7 @@ CREATE TABLE Banda(
 
 CREATE TABLE Musico(
     nomeReal VARCHAR(255),
-    dataNascimento SMALLINT,
+    dataNascimento DATE,
     estiloMusical VARCHAR(255),
     idBanda INT,
     PRIMARY KEY (nomeReal),
@@ -184,11 +184,9 @@ INSERT INTO CurtirFilme VALUES ('Maria', 2, 9);
 
 
 INSERT INTO Banda VALUES (1, 'Marmonas');
-INSERT INTO Banda VALUES (2, 'Marmonas');
+INSERT INTO Banda VALUES (2, 'Mamutes');
 INSERT INTO Banda VALUES (3, 'Sludge');
-INSERT INTO Banda VALUES (4, 'Sludge');
-INSERT INTO Banda VALUES (5, 'Baby Metal');
-INSERT INTO Banda VALUES (6, 'Baby Metal');
+INSERT INTO Banda VALUES (4, 'Baby Metal');
 
 
 INSERT INTO Musico VALUES ('Johnny Blaze','1982-02-28', 'Heavy Metal', 1);
