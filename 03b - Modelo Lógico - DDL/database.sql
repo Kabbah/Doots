@@ -187,8 +187,8 @@ INSERT INTO Banda VALUES (1, 'Marmonas');
 INSERT INTO Banda VALUES (2, 'Marmonas');
 INSERT INTO Banda VALUES (3, 'Sludge');
 INSERT INTO Banda VALUES (4, 'Sludge');
-INSERT INTO Banda VALUES (1, 'Baby Metal');
-INSERT INTO Banda VALUES (3, 'Baby Metal');
+INSERT INTO Banda VALUES (5, 'Baby Metal');
+INSERT INTO Banda VALUES (6, 'Baby Metal');
 
 
 INSERT INTO Musico VALUES ('Johnny Blaze','1982-02-28', 'Heavy Metal', 1);
