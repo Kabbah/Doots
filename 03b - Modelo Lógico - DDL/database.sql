@@ -143,5 +143,73 @@ INSERT INTO ArtistaMusical VALUES (3,'Alemanha','Country','Priscilla');
 INSERT INTO ArtistaMusical VALUES (4,'Argentina','Rock','Hermano');
 
 
+INSERT INTO UsuarioConhece VALUES ('Joao', 'Maria');
+INSERT INTO UsuarioConhece VALUES ('Joao', 'Angelo');
+INSERT INTO UsuarioConhece VALUES ('Joao', 'Charles');
+INSERT INTO UsuarioConhece VALUES ('Maria', 'Angelo');
+INSERT INTO UsuarioConhece VALUES ('Maria', 'Charles');
+INSERT INTO UsuarioConhece VALUES ('Angelo', 'Charles');
 
 
+INSERT INTO UsuarioBloqueia VALUES ('Joao', 'Maria', TRUE, TRUE, FALSE, NULL);
+INSERT INTO UsuarioBloqueia VALUES ('Joao', 'Angelo', FALSE, TRUE, FALSE, NULL);
+INSERT INTO UsuarioBloqueia VALUES ('Joao', 'Charles', TRUE, FALSE, FALSE, NULL);
+INSERT INTO UsuarioBloqueia VALUES ('Maria', 'Angelo', FALSE, FALSE, TRUE, NULL);
+INSERT INTO UsuarioBloqueia VALUES ('Maria', 'Charles', TRUE, TRUE, TRUE, NULL);
+INSERT INTO UsuarioBloqueia VALUES ('Angelo', 'Charles', TRUE, TRUE, TRUE, 'Comeu minha sopa!');
+
+
+INSERT INTO AtorFilme VALUES (1, 1);
+INSERT INTO AtorFilme VALUES (1, 2);
+INSERT INTO AtorFilme VALUES (2, 2);
+INSERT INTO AtorFilme VALUES (2, 3);
+INSERT INTO AtorFilme VALUES (3, 3);
+INSERT INTO AtorFilme VALUES (4, 4);
+
+
+INSERT INTO ClassificacaoFilme VALUES (1, 1);
+INSERT INTO ClassificacaoFilme VALUES (2, 1);
+INSERT INTO ClassificacaoFilme VALUES (2, 3);
+INSERT INTO ClassificacaoFilme VALUES (3, 2);
+INSERT INTO ClassificacaoFilme VALUES (3, 3);
+INSERT INTO ClassificacaoFilme VALUES (4, 6);
+
+
+INSERT INTO CurtirFilme VALUES ('Joao', 1, 9);
+INSERT INTO CurtirFilme VALUES ('Maria', 1, 10);
+INSERT INTO CurtirFilme VALUES ('Angelo', 4, 5);
+INSERT INTO CurtirFilme VALUES ('Charles', 3, 7);
+INSERT INTO CurtirFilme VALUES ('Joao', 2, 9);
+INSERT INTO CurtirFilme VALUES ('Maria', 2, 9);
+
+
+INSERT INTO Banda VALUES (1, 'Marmonas');
+INSERT INTO Banda VALUES (2, 'Marmonas');
+INSERT INTO Banda VALUES (3, 'Sludge');
+INSERT INTO Banda VALUES (4, 'Sludge');
+INSERT INTO Banda VALUES (1, 'Baby Metal');
+INSERT INTO Banda VALUES (3, 'Baby Metal');
+
+
+INSERT INTO Musico VALUES ('Johnny Blaze','1982-02-28', 'Heavy Metal', 1);
+INSERT INTO Musico VALUES ('Mary Anne','1990-11-07', 'Pop', 2);
+INSERT INTO Musico VALUES ('Paul Jackson','1983-01-13', 'Rock', 2);
+INSERT INTO Musico VALUES ('Martin Stevens','1976-08-05', 'Jazz', 3);
+INSERT INTO Musico VALUES ('Frank Roberts','1971-04-11', 'Blues', 3);
+INSERT INTO Musico VALUES ('Jose Carlito','1986-06-19', 'Salsa', 4);
+
+
+INSERT INTO Cantor VALUES (1, 'Johnny Blaze');
+INSERT INTO Cantor VALUES (2, 'Mary Anne');
+INSERT INTO Cantor VALUES (2, 'Paul Jackson');
+INSERT INTO Cantor VALUES (3 'Martin Stevens');
+INSERT INTO Cantor VALUES (3, 'Frank Roberts');
+INSERT INTO Cantor VALUES (4, 'Jose Carlito');
+
+
+INSERT INTO CurtirArtistaMusical VALUES ('Joao', 1, 8);
+INSERT INTO CurtirArtistaMusical VALUES ('Joao', 2, 7);
+INSERT INTO CurtirArtistaMusical VALUES ('Maria', 3, 8);
+INSERT INTO CurtirArtistaMusical VALUES ('Angelo', 4, 10);
+INSERT INTO CurtirArtistaMusical VALUES ('Charles', 3, 9);
+INSERT INTO CurtirArtistaMusical VALUES ('Maria', 4, 8);
