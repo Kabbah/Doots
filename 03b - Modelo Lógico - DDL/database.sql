@@ -20,9 +20,9 @@ CREATE TABLE UsuarioBloqueia (
 	razaoAbusivo BOOLEAN,
 	razaoPessoal BOOLEAN,
 	razaoOutra VARCHAR(255),
-	PRIMARY KEY (loginSujeito, loginConhecido),
+	PRIMARY KEY (loginSujeito, loginBloqueado),
 	FOREIGN KEY (loginSujeito) REFERENCES Usuario(login),
-	FOREIGN KEY (loginConhecido) REFERENCES Usuario(login)
+	FOREIGN KEY (loginBloqueado) REFERENCES Usuario(login)
 );
 
 CREATE TABLE ArtistaCinema (
@@ -68,8 +68,51 @@ CREATE TABLE ClassificacaoFilme (
 CREATE TABLE CurtirFilme (
 	login VARCHAR(255),
 	idFilme INT,
-	nota int,
+	nota INT,
 	PRIMARY KEY (login, idFilme),
 	FOREIGN KEY (login) REFERENCES Usuario(login),
 	FOREIGN KEY (idFilme) REFERENCES Filme(id)
 );
+
+CREATE TABLE ArtistaMusical(
+    id INT,
+    pais VARCHAR(255),
+    genero VARCHAR(255),
+    nomeArtistico VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE Banda(
+    id INT,
+    nome VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES ArtistaMusical(id)
+);
+
+CREATE TABLE Musico(
+    nomeReal VARCHAR(255),
+    dataNascimento SMALLINT,
+    estiloMusical VARCHAR(255),
+    idBanda INT,
+    PRIMARY KEY (nomeReal),
+    FOREIGN KEY (idBanda) REFERENCES Banda(id)
+);
+
+CREATE TABLE Cantor(
+    id INT,
+    nomeMusico VARCHAR(255),
+    PRIMARY KEY (id, nomeMusico),
+    FOREIGN KEY (id) REFERENCES ArtistaMusical(id),
+    FOREIGN KEY (nomeMusico) REFERENCES Musico(nomeReal)
+);
+
+CREATE TABLE CurtirArtistaMusical(
+    login VARCHAR(255),
+    idArtistaMusical INT,
+    nota SMALLINT,
+    PRIMARY KEY (login, idArtistaMusical),
+    FOREIGN KEY (login) REFERENCES Usuario(login),
+    FOREIGN KEY (idArtistaMusical) REFERENCES ArtistaMusical(id)
+); 
+
+
