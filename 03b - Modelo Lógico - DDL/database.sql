@@ -202,7 +202,7 @@ INSERT INTO Musico VALUES ('Jose Carlito','1986-06-19', 'Salsa', 4);
 INSERT INTO Cantor VALUES (1, 'Johnny Blaze');
 INSERT INTO Cantor VALUES (2, 'Mary Anne');
 INSERT INTO Cantor VALUES (2, 'Paul Jackson');
-INSERT INTO Cantor VALUES (3 'Martin Stevens');
+INSERT INTO Cantor VALUES (3, 'Martin Stevens');
 INSERT INTO Cantor VALUES (3, 'Frank Roberts');
 INSERT INTO Cantor VALUES (4, 'Jose Carlito');
 
