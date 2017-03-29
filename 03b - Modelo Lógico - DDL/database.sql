@@ -91,9 +91,9 @@ CREATE TABLE Banda(
 
 CREATE TABLE Musico(
     nomeReal VARCHAR(255),
-    dataNascimento DATE,
     estiloMusical VARCHAR(255),
     idBanda INT,
+    dataNascimento DATE,
     PRIMARY KEY (nomeReal),
     FOREIGN KEY (idBanda) REFERENCES Banda(id)
 );
@@ -189,12 +189,12 @@ INSERT INTO Banda VALUES (3, 'Sludge');
 INSERT INTO Banda VALUES (4, 'Baby Metal');
 
 
-INSERT INTO Musico VALUES ('Johnny Blaze','1982-02-28', 'Heavy Metal', 1);
-INSERT INTO Musico VALUES ('Mary Anne','1990-11-07', 'Pop', 2);
-INSERT INTO Musico VALUES ('Paul Jackson','1983-01-13', 'Rock', 2);
-INSERT INTO Musico VALUES ('Martin Stevens','1976-08-05', 'Jazz', 3);
-INSERT INTO Musico VALUES ('Frank Roberts','1971-04-11', 'Blues', 3);
-INSERT INTO Musico VALUES ('Jose Carlito','1986-06-19', 'Salsa', 4);
+INSERT INTO Musico VALUES ('Johnny Blaze', 'Heavy Metal', 1, '1982-02-28');
+INSERT INTO Musico VALUES ('Mary Anne', 'Pop', 2, '1990-11-07');
+INSERT INTO Musico VALUES ('Paul Jackson', 'Rock', 2, '1983-01-13');
+INSERT INTO Musico VALUES ('Martin Stevens', 'Jazz', 3, '1976-08-05');
+INSERT INTO Musico VALUES ('Frank Roberts', 'Blues', 3, '1971-04-11');
+INSERT INTO Musico VALUES ('Jose Carlito', 'Salsa', 4, '1986-06-19');
 
 
 INSERT INTO Cantor VALUES (1, 'Johnny Blaze');
