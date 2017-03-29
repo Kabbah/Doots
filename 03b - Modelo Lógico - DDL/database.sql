@@ -115,4 +115,33 @@ CREATE TABLE CurtirArtistaMusical(
     FOREIGN KEY (idArtistaMusical) REFERENCES ArtistaMusical(id)
 ); 
 
+INSERT INTO Usuario VALUES ('Joao','João da Silva','Ponta Grossa');
+INSERT INTO Usuario VALUES ('Maria','Maria Costa','Curitiba');
+INSERT INTO Usuario VALUES ('Angelo','Angelo Borsoi Ross','Caçador');
+INSERT INTO Usuario VALUES ('Charles','Charles Fridman','Uberlândia');
+
+INSERT INTO ArtistaCinema VALUES (1,'Rua Silva Jardim 194','99854-6687');
+INSERT INTO ArtistaCinema VALUES (2,'Av. Marechal Cornelho 333','3542-6532');
+INSERT INTO ArtistaCinema VALUES (3,'Rua Biscoitos Cheirosos','3596-5263');
+INSERT INTO ArtistaCinema VALUES (4,'Rua Skybridge 4242','99956-4523');
+
+INSERT INTO Filme VALUES (1,'Logan','2017-02-28',1);
+INSERT INTO Filme VALUES (2,'Como Treinar Seu Dragão','2010-06-13',2);
+INSERT INTO Filme VALUES (3,'Up!','2008-08-12',3);
+INSERT INTO Filme VALUES (4,'Biscoitos','2012-12-21',4);
+
+INSERT INTO Categoria VALUES (1,'Ação',NULL);
+INSERT INTO Categoria VALUES (2,'Drama',NULL);
+INSERT INTO Categoria VALUES (3,'Comédia',NULL);
+INSERT INTO Categoria VALUES (4,'Ficção',NULL);
+INSERT INTO Categoria VALUES (5,'Sci-fi',4);
+INSERT INTO Categoria VALUES (6,'Romance',2);
+
+INSERT INTO ArtistaMusical VALUES (1,'Brasil','Samba','Netinho');
+INSERT INTO ArtistaMusical VALUES (2,'Estados Unidos da América','Regge','James Regging');
+INSERT INTO ArtistaMusical VALUES (3,'Alemanha','Country','Priscilla');
+INSERT INTO ArtistaMusical VALUES (4,'Argentina','Rock','Hermano');
+
+
+
 
