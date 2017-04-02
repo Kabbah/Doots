@@ -1,21 +1,22 @@
-import requests
-from xml.dom import minidom
-from peewee import *
+from urllib.request import urlopen
+from bs4 import BeautifulSoup # Necessitar baixar: pip install bs4
+from peewee import * # Pelo amor de deus conserta isso aki, n deixa como import *
 import psycopg2
 
 print('Obtendo dados da web...')
 
-personFile = requests.get('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/person.xml')
-personData = minidom.parseString(personFile.text)
+# Hmm... Sopa...
+personSoup = BeautifulSoup(urlopen('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/person.xml'),'xml')
+musicSoup = BeautifulSoup(urlopen('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/music.xml'),'xml')
+movieSoup = BeautifulSoup(urlopen('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/movie.xml'),'xml')
+knowsSoup = BeautifulSoup(urlopen('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/knows.xml'),'xml')
 
-musicFile = requests.get('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/music.xml')
-musicData = minidom.parseString(musicFile.text)
+# Cada um desses retorna uma array de cada linha nos xml
+entriesPerson = personSoup.find_all("Person") # Para acessar, por exemplo, o atributo "name", basta usar entriesPerson[i]["name"]
+entriesMusic = musicSoup.find_all("LikesMusic") # Para o atributo "rating": entriesMusic[i]["rating"] e assim vai
+entriesMovie = movieSoup.find_all("LikesMovie")
+entriesKnows = knowsSoup.find_all("Knows")
 
-movieFile = requests.get('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/movie.xml')
-movieData = minidom.parseString(movieFile.text)
-
-knowsFile = requests.get('http://dainf.ct.utfpr.edu.br/~gomesjr/BD1/data/knows.xml')
-knowsData = minidom.parseString(knowsFile.text)
 
 print('Dados obtidos com sucesso.')
 
@@ -38,11 +39,13 @@ class Usuario(BaseModel):
     cidadeNatal = CharField()
 
 db.create_tables([Usuario], safe=True)
-#Usuario.create(
-#    login = 'teste',
-#    nomeCompleto = 'Teste',
-#    cidadeNatal = 'Teste'
-#)
+for user in entriesPerson:
+	# Comentando pq não testado
+	#Usuario.create(
+	#    login = user["uri"].lstrip('http://utfpr.edu.br/CSB30/2017/1/'),
+	#    nomeCompleto = user["name"].title(), # title() deixa a primeira letra de cada palavra maiuscula
+	#    cidadeNatal = user["hometown"].title()
+	#)
 result = Usuario.select()
 for user in result:
     print(user.login)
