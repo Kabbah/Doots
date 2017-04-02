@@ -3,6 +3,10 @@ from bs4 import BeautifulSoup # Necessitar baixar: pip install bs4
 from peewee import * # Pelo amor de deus conserta isso aki, n deixa como import *
 import psycopg2
 
+# ================================================================================
+# Parsing dos arquivos XML
+# ================================================================================
+
 print('Obtendo dados da web...')
 
 # Hmm... Sopa...
@@ -17,8 +21,11 @@ entriesMusic = musicSoup.find_all("LikesMusic") # Para o atributo "rating": entr
 entriesMovie = movieSoup.find_all("LikesMovie")
 entriesKnows = knowsSoup.find_all("Knows")
 
-
 print('Dados obtidos com sucesso.')
+
+# ================================================================================
+# Conexão com o banco de dados
+# ================================================================================
 
 db = PostgresqlDatabase(
     '1717545_Victor',
@@ -29,6 +36,7 @@ db = PostgresqlDatabase(
 
 db.connect()
 
+# Classes modelo das quais todas as tabelas herdam
 class BaseModel(Model):
     class Meta:
         database = db
@@ -38,7 +46,56 @@ class Usuario(BaseModel):
     nomeCompleto = CharField()
     cidadeNatal = CharField()
 
+# Classes referentes a cada tabela
+class UsuarioConhece(BaseModel):
+    loginSujeito = ForeignKeyField(Usuario)
+    loginConhecido = ForeignKeyField(Usuario)
+    class Meta:
+        primary_key = CompositeKey("loginSujeito", "loginConhecido")
+
+class UsuarioBloqueia(BaseModel):
+    loginSujeito = ForeignKeyField(Usuario)
+    loginBloqueado = ForeignKeyField(Usuario)
+    razaoSpam = BooleanField()
+    razaoAbusivo = BooleanField()
+    razaoPessoal = BooleanField()
+    razaoOutra = CharField()
+    class Meta:
+        primary_key = CompositeKey("loginSujeito", "loginBloqueado")
+
+class ArtistaCinema(BaseModel):
+    id = PrimaryKeyField()
+    endereco = CharField()
+    telefone = CharField()
+
+class Filme(BaseModel):
+    id = PrimaryKeyField()
+    nome = CharField()
+    dataLancamento = DateField()
+    idDiretor = ForeignKeyField(ArtistaCinema)
+
+class AtorFilme(BaseModel):
+    idFilme = ForeignKeyField(Filme)
+    idAtor = ForeignKeyField(ArtistaCinema)
+    class Meta:
+        primary_key = CompositeKey("idFilme", "idAtor")
+
+class Categoria(BaseModel):
+    id = PrimaryKeyField()
+    nome = CharField()
+    idSupercategoria = ForeignKeyField("self", null = True)
+
+class ClassificacaoFilme(BaseModel):
+    idFilme = ForeignKeyField(Filme)
+    idCategoria = ForeignKeyField(Categoria)
+    class Meta:
+        primary_key = CompositeKey("idFilme", "idCategoria")
+
+# TODO: Terminar essas classes
+
+# Cria as tabelas no banco de dados caso não existam (safe = True)
 db.create_tables([Usuario], safe=True)
+
 for user in entriesPerson:
 	# Comentando pq não testado
 	#Usuario.create(
@@ -46,9 +103,11 @@ for user in entriesPerson:
 	#    nomeCompleto = user["name"].title(), # title() deixa a primeira letra de cada palavra maiuscula
 	#    cidadeNatal = user["hometown"].title()
 	#)
-result = Usuario.select()
-for user in result:
-    print(user.login)
+
+# Equivalente a SELECT * FROM Usuario
+# result = Usuario.select()
+# for user in result:
+#    print(user.login)
 
 if not db.is_closed():
     db.close()
