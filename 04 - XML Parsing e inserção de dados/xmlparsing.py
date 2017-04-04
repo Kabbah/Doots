@@ -158,74 +158,92 @@ class CurtirArtistaMusical(BaseModel):
 # ================================================================================
 
 # Cria as tabelas no banco de dados caso não existam (safe = True)
-# Deixando comentado por enquanto.
-##db.create_tables([Usuario, UsuarioConhece, CurtirFilme, CurtirArtistaMusical], safe=True)
+db.create_tables([Usuario, UsuarioConhece, CurtirFilme, CurtirArtistaMusical], safe=True)
 
 # Cria os registros no banco de dados
-# Deixando comentado por enquanto.
-##for user in entriesPerson:
-##    Usuario.create(
-##        login = user["uri"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
-##        nomeCompleto = user["name"].title(), # title() deixa a primeira letra de cada palavra maiuscula
-##        cidadeNatal = user["hometown"].title()
-##    )
-##
-##for entry in entriesKnows:
-##    UsuarioConhece.create(
-##        loginSujeito = entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
-##        loginConhecido = entry["colleague"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1)
-##    )
-##
-##for entry in entriesMusic:
-##    CurtirArtistaMusical.create(
-##        login = entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
-##        idArtistaMusical = entry["bandUri"].replace("https://en.wikipedia.org/wiki/", "", 1),
-##        nota = int(entry["rating"])
-##    )
-##
-##for entry in entriesMovie:
-##    movieLink = entry["movieUri"].rstrip("/")
-##    CurtirFilme.create(
-##        login = entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
-##        idFilme = movieLink.replace("http://www.imdb.com/title/", "", 1),
-##        nota = int(entry["rating"])
-##    )
-
-# Debug
+print("Iniciando registro de usuários...")
 for user in entriesPerson:
-    print(user["uri"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1))
-    print(user["name"].title())
-    print(user["hometown"].title())
-    
+    try:
+        Usuario.create(
+            login = user["uri"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
+            nomeCompleto = user["name"].title(), # title() deixa a primeira letra de cada palavra maiuscula
+            cidadeNatal = user["hometown"].title()
+        )
+    except IntegrityError as erro:
+        print(erro)
+        print("O erro ocorreu ao tentar adicionar o seguinte registro:")
+        print("Tabela: Usuario")
+        print("login = " + user["uri"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1))
+        print("nomeCompleto = " + user["name"].title())
+        print("cidadeNatal = " + user["hometown"].title())
+        print("Este registro foi ignorado e a inserção dos demais registros prosseguirá normalmente.")
+        print()
+        db.rollback()
+print("Registro de usuários finalizado.")
+
+print("Iniciando registro de conhecidos...")
 for entry in entriesKnows:
-    print(
-        entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1) + " " +
-        entry["colleague"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1)
-    )
+    try:
+        UsuarioConhece.create(
+            loginSujeito = entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
+            loginConhecido = entry["colleague"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1)
+        )
+    except IntegrityError as erro:
+        print(erro)
+        print("O erro ocorreu ao tentar adicionar o seguinte registro:")
+        print("Tabela: UsuarioConhece")
+        print("loginSujeito = " + entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1))
+        print("loginConhecido = " + entry["colleague"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1))
+        print("Este registro foi ignorado e a inserção dos demais registros prosseguirá normalmente.")
+        print()
+        db.rollback()
+print("Registro de conhecidos finalizado.")
 
+print("Iniciando registro de curtidas de artistas musicais...")
 for entry in entriesMusic:
-    print(
-        entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1) + " " +
-        entry["bandUri"].replace("https://en.wikipedia.org/wiki/", "", 1) + " " +
-        entry["rating"]
-    )
+    try:
+        CurtirArtistaMusical.create(
+            login = entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
+            idArtistaMusical = entry["bandUri"].replace("https://en.wikipedia.org/wiki/", "", 1),
+            nota = int(entry["rating"])
+        )
+    except IntegrityError as erro:
+        print(erro)
+        print("O erro ocorreu ao tentar adicionar o seguinte registro:")
+        print("Tabela: CurtirArtistaMusical")
+        print("login = " + entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1))
+        print("idArtistaMusical = " + entry["bandUri"].replace("https://en.wikipedia.org/wiki/", "", 1))
+        print("nota = " + entry["rating"])
+        print("Este registro foi ignorado e a inserção dos demais registros prosseguirá normalmente.")
+        print()
+        db.rollback()
+print("Registro de curtidas de artistas musicais finalizado.")
 
+print("Iniciando registro de curtidas de filmes...")
 for entry in entriesMovie:
     movieLink = entry["movieUri"].rstrip("/")
-    print(
-        entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1) + " " +
-        movieLink.replace("http://www.imdb.com/title/", "", 1) + " " +
-        entry["rating"]
-    )
-
-# Equivalente a SELECT * FROM Usuario
-# result = Usuario.select()
-# for user in result:
-#    print(user.login)
+    try:
+        CurtirFilme.create(
+            login = entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
+            idFilme = movieLink.replace("http://www.imdb.com/title/", "", 1),
+            nota = int(entry["rating"])
+        )
+    except IntegrityError as erro:
+        print(erro)
+        print("O erro ocorreu ao tentar adicionar o seguinte registro:")
+        print("Tabela: CurtirFilme")
+        print("login = " + entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1))
+        print("idFilme = " + movieLink.replace("http://www.imdb.com/title/", "", 1))
+        print("nota = " + entry["rating"])
+        print("Este registro foi ignorado e a inserção dos demais registros prosseguirá normalmente.")
+        print()
+        db.rollback()
+print("Registro de curtidas de filmes finalizado.")
 
 # ================================================================================
 # Fechamento da conexão com o banco de dados
 # ================================================================================
 
+print("Desconectando-se do banco de dados...")
 if not db.is_closed():
     db.close()
