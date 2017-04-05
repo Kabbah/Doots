@@ -1,6 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from peewee import * # Pelo amor de deus conserta isso aki, n deixa como import *
+import peewee as pw
 import psycopg2
 
 # Fazer antes de rodar o script:
@@ -33,7 +33,7 @@ print('Dados obtidos com sucesso.')
 # Conexão com o banco de dados
 # ================================================================================
 
-db = PostgresqlDatabase(
+db = pw.PostgresqlDatabase(
     '1717545_Victor',
     user='m0n0p0ly',
     password='#n0m0n3y#',
@@ -55,103 +55,103 @@ class BaseModel(Model):
 # Observação: Para esse exercício, algumas classes foram simplificadas,
 # e classes não utilizadas foram comentadas.
 class Usuario(BaseModel):
-    login = CharField(primary_key = True)
-    nomeCompleto = CharField()
-    cidadeNatal = CharField()
+    login = pw.CharField(primary_key = True)
+    nomeCompleto = pw.CharField()
+    cidadeNatal = pw.CharField()
 
 class UsuarioConhece(BaseModel):
-    loginSujeito = ForeignKeyField(Usuario, related_name = "conhecidos", db_column = "loginSujeito")
-    loginConhecido = ForeignKeyField(Usuario, db_column = "loginConhecido")
+    loginSujeito = pw.ForeignKeyField(Usuario, related_name = "conhecidos", db_column = "loginSujeito")
+    loginConhecido = pw.ForeignKeyField(Usuario, db_column = "loginConhecido")
     class Meta:
-        primary_key = CompositeKey("loginSujeito", "loginConhecido")
+        primary_key = pw.CompositeKey("loginSujeito", "loginConhecido")
 
 ##class UsuarioBloqueia(BaseModel):
-##    loginSujeito = ForeignKeyField(Usuario, related_name = "bloqueados")
-##    loginBloqueado = ForeignKeyField(Usuario)
-##    razaoSpam = BooleanField()
-##    razaoAbusivo = BooleanField()
-##    razaoPessoal = BooleanField()
-##    razaoOutra = CharField()
+##    loginSujeito = pw.ForeignKeyField(Usuario, related_name = "bloqueados")
+##    loginBloqueado = pw.ForeignKeyField(Usuario)
+##    razaoSpam = pw.BooleanField()
+##    razaoAbusivo = pw.BooleanField()
+##    razaoPessoal = pw.BooleanField()
+##    razaoOutra = pw.CharField()
 ##    class Meta:
-##        primary_key = CompositeKey("loginSujeito", "loginBloqueado")
+##        primary_key = pw.CompositeKey("loginSujeito", "loginBloqueado")
 
 ##class ArtistaCinema(BaseModel):
-##    id = PrimaryKeyField()
-##    endereco = CharField()
-##    telefone = CharField()
+##    id = pw.PrimaryKeyField()
+##    endereco = pw.CharField()
+##    telefone = pw.CharField()
 
 ##class Filme(BaseModel):
-##    id = PrimaryKeyField()
-##    nome = CharField()
-##    dataLancamento = DateField()
-##    idDiretor = ForeignKeyField(ArtistaCinema, related_name = "filmes")
+##    id = pw.PrimaryKeyField()
+##    nome = pw.CharField()
+##    dataLancamento = pw.DateField()
+##    idDiretor = pw.ForeignKeyField(ArtistaCinema, related_name = "filmes")
 
 ##class AtorFilme(BaseModel):
-##    idFilme = ForeignKeyField(Filme, related_name = "atores")
-##    idAtor = ForeignKeyField(ArtistaCinema)
+##    idFilme = pw.ForeignKeyField(Filme, related_name = "atores")
+##    idAtor = pw.ForeignKeyField(ArtistaCinema)
 ##    class Meta:
-##        primary_key = CompositeKey("idFilme", "idAtor")
+##        primary_key = pw.CompositeKey("idFilme", "idAtor")
 
 ##class Categoria(BaseModel):
-##    id = PrimaryKeyField()
-##    nome = CharField()
-##    idSupercategoria = ForeignKeyField("self", null = True, related_name = "subcategorias")
+##    id = pw.PrimaryKeyField()
+##    nome = pw.CharField()
+##    idSupercategoria = pw.ForeignKeyField("self", null = True, related_name = "subcategorias")
 
 ##class ClassificacaoFilme(BaseModel):
-##    idFilme = ForeignKeyField(Filme, related_name = "categorias")
-##    idCategoria = ForeignKeyField(Categoria, related_name = "filmes")
+##    idFilme = pw.ForeignKeyField(Filme, related_name = "categorias")
+##    idCategoria = pw.ForeignKeyField(Categoria, related_name = "filmes")
 ##    class Meta:
-##        primary_key = CompositeKey("idFilme", "idCategoria")
+##        primary_key = pw.CompositeKey("idFilme", "idCategoria")
 
 # Essa classe foi simplificada, pois não há necessidade de ter uma tabela Filme para esse exercício.
 ##class CurtirFilme(BaseModel):
-##    login = ForeignKeyField(Usuario, related_name = "filmescurtidos")
-##    idFilme = ForeignKeyField(Filme, related_name = "usuariosquecurtem")
-##    nota = IntegerField()
+##    login = pw.ForeignKeyField(Usuario, related_name = "filmescurtidos")
+##    idFilme = pw.ForeignKeyField(Filme, related_name = "usuariosquecurtem")
+##    nota = pw.IntegerField()
 ##    class Meta:
-##        primary_key = CompositeKey("login", "idFilme")
+##        primary_key = pw.CompositeKey("login", "idFilme")
 class CurtirFilme(BaseModel):
-    login = ForeignKeyField(Usuario, related_name = "filmescurtidos", db_column = "login")
-    idFilme = CharField()
-    nota = IntegerField()
+    login = pw.ForeignKeyField(Usuario, related_name = "filmescurtidos", db_column = "login")
+    idFilme = pw.CharField()
+    nota = pw.IntegerField()
     class Meta:
-        primary_key = CompositeKey("login", "idFilme")
+        primary_key = pw.CompositeKey("login", "idFilme")
 
 ##class ArtistaMusical(BaseModel):
-##    id = PrimaryKeyField()
-##    pais = CharField()
-##    genero = CharField()
-##    nomeArtistico = CharField()
+##    id = pw.PrimaryKeyField()
+##    pais = pw.CharField()
+##    genero = pw.CharField()
+##    nomeArtistico = pw.CharField()
 
 ##class Banda(BaseModel):
-##    id = ForeignKeyField(ArtistaMusical, primary_key = True)
+##    id = pw.ForeignKeyField(ArtistaMusical, primary_key = True)
 
 ##class Musico(BaseModel):
-##    nomeReal = CharField(primary_key = True)
-##    estiloMusical = CharField()
-##    idBanda = ForeignKeyField(Banda, related_name = "musicos")
-##    dataNascimento = DateField()
+##    nomeReal = pw.CharField(primary_key = True)
+##    estiloMusical = pw.CharField()
+##    idBanda = pw.ForeignKeyField(Banda, related_name = "musicos")
+##    dataNascimento = pw.DateField()
 
 ##class Cantor(BaseModel):
-##    id = ForeignKeyField(ArtistaMusical, related_name = "cantor")
-##    nomeMusico = ForeignKeyField(Musico, related_name = "cantorRel")
+##    id = pw.ForeignKeyField(ArtistaMusical, related_name = "cantor")
+##    nomeMusico = pw.ForeignKeyField(Musico, related_name = "cantorRel")
 ##    class Meta:
-##        primary_key = CompositeKey("id", "nomeMusico")
+##        primary_key = pw.CompositeKey("id", "nomeMusico")
 
 # Essa classe foi simplificada, pois as informações do XML não são suficientes para
 # justificar a necessidade das classes ArtistaMusica, Banda, Musico e Cantor.
 ##class CurtirArtistaMusical(BaseModel):
-##    login = ForeignKeyField(Usuario, related_name = "artistascurtidos")
-##    idArtistaMusical = ForeignKeyField(ArtistaMusical, related_name = "usuariosquecurtem")
-##    nota = IntegerField()
+##    login = pw.ForeignKeyField(Usuario, related_name = "artistascurtidos")
+##    idArtistaMusical = pw.ForeignKeyField(ArtistaMusical, related_name = "usuariosquecurtem")
+##    nota = pw.IntegerField()
 ##    class Meta:
-##        primary_key = CompositeKey("login", "idArtistaMusical")
+##        primary_key = pw.CompositeKey("login", "idArtistaMusical")
 class CurtirArtistaMusical(BaseModel):
-    login = ForeignKeyField(Usuario, related_name = "artistascurtidos", db_column = "login")
-    idArtistaMusical = CharField()
-    nota = IntegerField()
+    login = pw.ForeignKeyField(Usuario, related_name = "artistascurtidos", db_column = "login")
+    idArtistaMusical = pw.CharField()
+    nota = pw.IntegerField()
     class Meta:
-        primary_key = CompositeKey("login", "idArtistaMusical")
+        primary_key = pw.CompositeKey("login", "idArtistaMusical")
 
 # ================================================================================
 # Execução de queries no banco de dados
