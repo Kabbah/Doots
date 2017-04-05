@@ -47,7 +47,7 @@ db.connect()
 # ================================================================================
 
 # Classe modelo da qual todas as outras classes (tabelas) herdam
-class BaseModel(Model):
+class BaseModel(pw.Model):
     class Meta:
         database = db
 
@@ -169,7 +169,7 @@ for user in entriesPerson:
             nomeCompleto = user["name"].title(), # title() deixa a primeira letra de cada palavra maiuscula
             cidadeNatal = user["hometown"].title()
         )
-    except IntegrityError as erro:
+    except pw.IntegrityError as erro:
         print(erro)
         print("O erro ocorreu ao tentar adicionar o seguinte registro:")
         print("Tabela: Usuario")
@@ -188,7 +188,7 @@ for entry in entriesKnows:
             loginSujeito = entry["person"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1),
             loginConhecido = entry["colleague"].replace("http://utfpr.edu.br/CSB30/2017/1/", "", 1)
         )
-    except IntegrityError as erro:
+    except pw.IntegrityError as erro:
         print(erro)
         print("O erro ocorreu ao tentar adicionar o seguinte registro:")
         print("Tabela: UsuarioConhece")
@@ -207,7 +207,7 @@ for entry in entriesMusic:
             idArtistaMusical = entry["bandUri"].replace("https://en.wikipedia.org/wiki/", "", 1),
             nota = int(entry["rating"])
         )
-    except IntegrityError as erro:
+    except pw.IntegrityError as erro:
         print(erro)
         print("O erro ocorreu ao tentar adicionar o seguinte registro:")
         print("Tabela: CurtirArtistaMusical")
@@ -228,7 +228,7 @@ for entry in entriesMovie:
             idFilme = movieLink.replace("http://www.imdb.com/title/", "", 1),
             nota = int(entry["rating"])
         )
-    except IntegrityError as erro:
+    except pw.IntegrityError as erro:
         print(erro)
         print("O erro ocorreu ao tentar adicionar o seguinte registro:")
         print("Tabela: CurtirFilme")
