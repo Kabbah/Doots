@@ -60,8 +60,8 @@ class Usuario(BaseModel):
     cidadeNatal = CharField()
 
 class UsuarioConhece(BaseModel):
-    loginSujeito = ForeignKeyField(Usuario, related_name = "conhecidos")
-    loginConhecido = ForeignKeyField(Usuario)
+    loginSujeito = ForeignKeyField(Usuario, related_name = "conhecidos", db_column = "loginSujeito")
+    loginConhecido = ForeignKeyField(Usuario, db_column = "loginConhecido")
     class Meta:
         primary_key = CompositeKey("loginSujeito", "loginConhecido")
 
@@ -111,7 +111,7 @@ class UsuarioConhece(BaseModel):
 ##    class Meta:
 ##        primary_key = CompositeKey("login", "idFilme")
 class CurtirFilme(BaseModel):
-    login = ForeignKeyField(Usuario, related_name = "filmescurtidos")
+    login = ForeignKeyField(Usuario, related_name = "filmescurtidos", db_column = "login")
     idFilme = CharField()
     nota = IntegerField()
     class Meta:
@@ -147,7 +147,7 @@ class CurtirFilme(BaseModel):
 ##    class Meta:
 ##        primary_key = CompositeKey("login", "idArtistaMusical")
 class CurtirArtistaMusical(BaseModel):
-    login = ForeignKeyField(Usuario, related_name = "artistascurtidos")
+    login = ForeignKeyField(Usuario, related_name = "artistascurtidos", db_column = "login")
     idArtistaMusical = CharField()
     nota = IntegerField()
     class Meta:
