@@ -10,17 +10,19 @@ from getpass import getpass
 # Conexão com o banco de dados
 # ================================================================================
 
-##if(len(sys.argv) == 5):
-##    ihost = sys.argv[1]
-##    iuser = sys.argv[2]
-##    ipassword = sys.argv[3]
-##    idatabase = sys.argv[4]
-##else:
-##    ihost = input("Digite o IP do host\n") # python 2 usa raw_input()
-##    iuser = input("Digite o usuário\n")
-##    ipassword = getpass("Digite a senha\n")
-##    idatabase = input("Digite o banco de dados\n")
+# Descomenta abaixo se quiser usar com parametros o arquivo .py em si
+#if(len(sys.argv) == 5):
+#    ihost = sys.argv[1]
+#    iuser = sys.argv[2]
+#    ipassword = sys.argv[3]
+#    idatabase = sys.argv[4]
+#else:
+#    ihost = input("Digite o IP do host\n")
+#    iuser = input("Digite o usuário\n")
+#    ipassword = getpass("Digite a senha\n")
+#    idatabase = input("Digite o banco de dados\n")
 
+# Comenta as variáveis abaixo se descomentar o código a cima
 ihost = "200.134.10.32"
 iuser = "m0n0p0ly"
 ipassword = "#n0m0n3y#"
@@ -83,19 +85,24 @@ def createUserKnows():
         print("Relacionamento criado com sucesso.")
 
 def updateUser():
-    oldLogin = input("Digite o login atual do usuário: ")
+    userLogin = input("Digite o login atual do usuário: ")
     try:
-        usuario = Usuario.get(Usuario.login == oldLogin)
+        usuario = Usuario.get(Usuario.login == userLogin)
     except Usuario.DoesNotExist:
         print("Não há um usuário cadastrado com este login.")
         db.rollback()
     else:
         print("")
-        # Aqui vai ter um UPDATE
-        # Jeitos de fazer:
-        # Primeiro: mostra um atributo, pede se quer alterar, mostra outro, pede se quer alterar...
-        # Segundo: mostra todos os atributos, pede pra digitar valores novos e f*da-se
-
+        newNomeCompleto = input("Digite o novo nome do usuário, deixe branco para manter\n")
+        newCidadeNatal = input("Digite a nova cidade natal do usuário, deixe branco para manter\n")
+        
+        if newNomeCompleto == "":
+            newNomeCompleto = usuario.nomeCompleto
+        if newCidadeNatal == "":
+            newCidadeNatal = usuario.cidadeNatal
+        
+        Usuario.update(nomeCompleto = newNomeCompleto, cidadeNatal = newCidadeNatal).where(Usuario.login == usuario.login).execute()
+        
 def deleteUser():
     oldLogin = input("Digite o login do usuário a ser excluído: ")
     try:
@@ -113,8 +120,10 @@ def deleteUser():
                   
 
 def showUsers():
+    formatTemplate = "{0:28}|{1:48}|{2:40}"
+    print(formatTemplate.format("Login", "Nome completo", "Cidade natal"))
     for usuario in Usuario.select().order_by(Usuario.login.asc()):
-        print(usuario.login)
+        print(formatTemplate.format(usuario.login, usuario.nomeCompleto, usuario.cidadeNatal))
     return
 
 def editUserMenu():
@@ -125,7 +134,8 @@ def editUserMenu():
         print("[1] Alterar dados de um usuário")
         print("[2] Adicionar conhecido de um usuário")
         print("[3] Excluir um usuário")
-        print("[4] Retornar ao menu principal")
+        print("[4] Listar dados novamente")
+        print("[5] Retornar ao menu principal")
         opcao = input("Digite uma opção: ")
         print("")
 
@@ -138,8 +148,12 @@ def editUserMenu():
         elif opcao == "3":
             print("Opção selecionada: [3] Excluir um usuário")
             deleteUser()
-        else:
+        elif opcao == "4":
+            showUsers()
+        elif opcao == "5":
             editingUsers = False
+        else:
+            print("Opção inválida")
     
 running = True
 while running:
@@ -161,7 +175,7 @@ while running:
     elif opcao == "3":
         running = False
     else:
-        print("Opção inválida.")
+        print("Opção inválida")
 
 if not db.is_closed():
     db.close()
