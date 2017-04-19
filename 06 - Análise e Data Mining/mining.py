@@ -54,12 +54,25 @@ class CurtirArtistaMusical(BaseModel):
         primary_key = pw.CompositeKey("login", "idArtistaMusical")
 
 # ================================================================================
+# Operações
+# ================================================================================
+
+def showAvgDev():
+    formatTemplate = "|{0:9}|{1:4.4}|{2:>4.4}|"
+    queryFilme = CurtirFilme.select(CurtirFilme.idFilme,pw.fn.Avg(CurtirFilme.nota).over(partition_by=[CurtirFilme.idFilme]),pw.fn.Stddev(CurtirFilme.nota).over(partition_by=[CurtirFilme.idFilme])).distinct()
+    print(formatTemplate.format("Filme","Avg","SDev"))
+    print("|---------|----|----|")
+    for result in queryFilme:
+        print(formatTemplate.format(result.idFilme,str(result.avg),str(result.stddev)))
+
+# ================================================================================
 # Interface
 # ================================================================================
 
+
 menu = True
 while menu:
-    print("\n[1] Exibir média e desvio padrão")
+    print("\n[1] Exibir média e desvio padrão de ratings")
     print("[2] Exibir artistas ou filmes com maior rating médio")
     print("[3] Exibir top10 artistas ou filmes mais populares")
     print("[4] Exibir relacionamentos simetricamente")
@@ -73,7 +86,8 @@ while menu:
 
     case = raw_input("Digite uma opção: ") # Apenas input() em Python3
     if case == "1":
-        print("Opção escolhida: [1] Exibir média e desvio padrão")
+        print("Opção escolhida: [1] Exibir média e desvio padrão de ratings")
+        showAvgDev()
     elif case == "2":
         print("Opção escolhida: [2] Exibir artistas ou filmes com maior rating médio")
     elif case == "3":
@@ -93,6 +107,9 @@ while menu:
     elif case == "10":
         print("Opção escolhida: [10] ")
     elif case == "11":
-        exit()
+        menu = False
     else:
         print("Opção inválida")
+
+if not db.is_closed():
+    db.close()
