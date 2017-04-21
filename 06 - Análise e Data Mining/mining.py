@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import matplotlib.pyplot as plt
 import psycopg2
 
 # ================================================================================
@@ -55,6 +56,7 @@ except psycopg2.Error as e:
 # Operações
 # ================================================================================
 
+# 1. Qual é a média e desvio padrão dos ratings para artistas musicais e filmes?
 def showArtistaAvgDev():
     formatTemplate = "| {0:50} | {1:4.4} | {2:>4.4} |"
     
@@ -68,7 +70,8 @@ def showArtistaAvgDev():
     for row in result:
         print(formatTemplate.format(row[0],str(row[1]),str(row[2])))
     print("+----------------------------------------------------+------+------+")
-
+    
+# 1. Qual é a média e desvio padrão dos ratings para artistas musicais e filmes?    
 def showFilmeAvgDev():
     formatTemplate = "| {0:9} | {1:4.4} | {2:>4.4} |"
     
@@ -83,6 +86,7 @@ def showFilmeAvgDev():
         print(formatTemplate.format(row[0],str(row[1]),str(row[2])))
     print("+-----------+------+------+")
 
+# 2. Quais são os artistas e filmes com o maior rating médio curtidos por pelo menos duas pessoas? Ordenados por rating médio.
 def showArtista2orMoreLikes():
     formatTemplate = "| {0:50} | {1:>4.4} | {2:>5.5} |"
 
@@ -97,6 +101,7 @@ def showArtista2orMoreLikes():
         print(formatTemplate.format(row[0],str(row[1]),str(row[2])))
     print("+----------------------------------------------------+------+-------+")
 
+# 2. Quais são os artistas e filmes com o maior rating médio curtidos por pelo menos duas pessoas? Ordenados por rating médio.
 def showFilme2orMoreLikes():
     formatTemplate = "| {0:9} | {1:>4.4} | {2:>5.5} |"
 
@@ -111,9 +116,11 @@ def showFilme2orMoreLikes():
         print(formatTemplate.format(row[0],str(row[1]),str(row[2])))
     print("+-----------+------+-------+")
 
+# 3. Quais são os 10 artistas musicais e filmes mais populares? Ordenados por popularidade.
 def showArtistaTop10():
     formatTemplate = "| {0:50} | {1:>4.4} |"
-
+    
+    # Popularidade foi definida como "Rating - 3". Assim, ao receber notas 2 e 1, o artista perde popularidade.
     query = "SELECT \"idArtistaMusical\", sum(nota - 3) FROM CurtirArtistaMusical GROUP BY \"idArtistaMusical\" HAVING count(\"idArtistaMusical\") > 1 ORDER BY sum(nota - 3) DESC LIMIT 10"
     db.execute(query)
     result = db.fetchall()
@@ -125,9 +132,11 @@ def showArtistaTop10():
         print(formatTemplate.format(row[0],str(row[1])))
     print("+----------------------------------------------------+------+")
 
+# 3. Quais são os 10 artistas musicais e filmes mais populares? Ordenados por popularidade.
 def showFilmeTop10():
     formatTemplate = "| {0:9} | {1:>4.4} |"
-
+    
+    # Popularidade foi definida como "Rating - 3". Assim, ao receber notas 2 e 1, o artista perde popularidade.
     query = "SELECT \"idFilme\", sum(nota - 3) FROM CurtirFilme GROUP BY \"idFilme\" HAVING count(\"idFilme\") > 1 ORDER BY sum(nota - 3) DESC LIMIT 10"
     db.execute(query)
     result = db.fetchall()
@@ -139,6 +148,8 @@ def showFilmeTop10():
         print(formatTemplate.format(row[0],str(row[1])))
     print("+-----------+------+")
 
+# 4. Crie uma view chamada ConheceNormalizada que represente simetricamente os relacionamentos de comnhecidos da turma. Por exemplo, se a conhece b mas b não declarou conhecer a, a view criada deve conter o relacionamento (b,a) além de (a,b).
+# Essa função não é executada já que a view já foi criada previamente
 def createViewConheceNormalizada():
     query = "CREATE VIEW ConheceNormalizada AS SELECT DISTINCT A.login AS loginA, B.login AS loginB FROM Usuario AS A, Usuario AS B, UsuarioConhece WHERE (UsuarioConhece.\"loginSujeito\" = A.login AND UsuarioConhece.\"loginConhecido\" = B.login) OR (UsuarioConhece.\"loginSujeito\" = B.login AND UsuarioConhece.\"loginConhecido\" = A.login) ORDER BY A.login ASC"
 
@@ -151,10 +162,12 @@ def createViewConheceNormalizada():
         print("View ConheceNormalizada criada com sucesso.")
         conn.commit()
 
+
+# 5. Quais são os conhecidos (duas pessoas ligadas na view ConheceNormalizada) que compartilham o maior numero de filmes curtidos?
 def showTopConhecidosMsmFilmes():
     formatTemplate = "| {0:20} | {1:20} | {2:>4} |"
     
-    query = "SELECT loginA, loginB, count(CF1.\"idFilme\") FROM ConheceNormalizada, CurtirFilme AS CF1, CurtirFilme AS CF2 WHERE (CF1.\"idFilme\" = CF2.\"idFilme\") AND (loginA = CF1.login) AND (loginB = CF2.login) GROUP BY loginA, loginB ORDER BY count(CF1.\"idFilme\") DESC"
+    query = "SELECT loginA, loginB, count(CF1.\"idFilme\") FROM ConheceNormalizada, CurtirFilme AS CF1, CurtirFilme AS CF2 WHERE (CF1.\"idFilme\" = CF2.\"idFilme\") AND (loginA = CF1.login) AND (loginB = CF2.login) GROUP BY loginA, loginB ORDER BY count(CF1.\"idFilme\") DESC LIMIT 1"
     db.execute(query)
     result = db.fetchall()
 
@@ -165,11 +178,52 @@ def showTopConhecidosMsmFilmes():
         print(formatTemplate.format(row[0],row[1],str(row[2])))
     print("+----------------------+----------------------+------+")
     
+# 7. Construa um gráfico para a função f(x) = número de pessoas que curtiram exatamente x filmes. 
+def graphPeopleXMovies():
+    query = "SELECT count(pessoa), filmes FROM (SELECT Usuario.login AS pessoa, count(CurtirFilme.login) AS filmes FROM Usuario NATURAL JOIN CurtirFilme GROUP BY Usuario.login) AS stuff GROUP BY filmes ORDER BY filmes"
+    db.execute(query)
+    result = db.fetchall()
+    
+    pessoasQCurtiram = []
+    filmesCurtidos = []
+    for row in result:
+        filmesCurtidos.append(row[1])
+        pessoasQCurtiram.append(row[0])
+    
+    plt.bar(filmesCurtidos, pessoasQCurtiram, 2/3, color="blue")
+    
+    # Coisas pra ficar bunito plot
+    plt.ylabel("Número de pessoas")
+    plt.xlabel("Número de filmes curtidos")
+    plt.xticks(range(1,filmesCurtidos[len(filmesCurtidos)-1]+1))
+    
+    plt.show()
+
+# 8. Construa um gráfico para a função f(x) = número de filmes curtidos por exatamente x pessoas.    
+def graphMoviesXPeople():
+    query = "SELECT count(filme), numeroCurtidas FROM (SELECT DISTINCT CurtirFilme.\"idFilme\" AS filme, count(CurtirFilme.login) AS numeroCurtidas FROM Usuario NATURAL JOIN CurtirFilme GROUP BY filme) AS things GROUP BY numeroCurtidas ORDER BY numeroCurtidas"
+    db.execute(query)
+    result = db.fetchall()
+    
+    numeroFilmes = []
+    numeroCurtidas = []
+    for row in result:
+        numeroFilmes.append(row[0])
+        numeroCurtidas.append(row[1])
+        
+    plt.bar(numeroCurtidas, numeroFilmes, 2/3, color="blue")
+    
+    # Coisas pra ficar bunito plot
+    plt.ylabel("Número de filmes")
+    plt.xlabel("Número de pessoas que curtiu")
+    plt.xticks(range(1,numeroCurtidas[len(numeroCurtidas)-1]+1))
+    
+    plt.show()
 # ================================================================================
 # Interface
 # ================================================================================
 
-showTopConhecidosMsmFilmes()
+graphMoviesXPeople()
 
 ##menu = True
 ##while menu:
