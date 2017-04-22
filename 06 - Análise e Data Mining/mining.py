@@ -20,39 +20,6 @@ except psycopg2.Error as e:
     exit()
 
 # ================================================================================
-# Descrição do banco de dados em classes
-# ================================================================================
-
-##class BaseModel(pw.Model):
-##    class Meta:
-##        database = db
-##
-##class Usuario(BaseModel):
-##    login = pw.CharField(primary_key = True)
-##    nomeCompleto = pw.CharField()
-##    cidadeNatal = pw.CharField()
-##
-##class UsuarioConhece(BaseModel):
-##    loginSujeito = pw.ForeignKeyField(Usuario, related_name = "conhecidos", db_column = "loginSujeito")
-##    loginConhecido = pw.ForeignKeyField(Usuario, db_column = "loginConhecido")
-##    class Meta:
-##        primary_key = pw.CompositeKey("loginSujeito", "loginConhecido")
-##
-##class CurtirFilme(BaseModel):
-##    login = pw.ForeignKeyField(Usuario, related_name = "filmescurtidos", db_column = "login")
-##    idFilme = pw.CharField()
-##    nota = pw.IntegerField()
-##    class Meta:
-##        primary_key = pw.CompositeKey("login", "idFilme")
-##
-##class CurtirArtistaMusical(BaseModel):
-##    login = pw.ForeignKeyField(Usuario, related_name = "artistascurtidos", db_column = "login")
-##    idArtistaMusical = pw.CharField()
-##    nota = pw.IntegerField()
-##    class Meta:
-##        primary_key = pw.CompositeKey("login", "idArtistaMusical")
-
-# ================================================================================
 # Operações
 # ================================================================================
 
@@ -177,6 +144,21 @@ def showTopConhecidosMsmFilmes():
     for row in result:
         print(formatTemplate.format(row[0],row[1],str(row[2])))
     print("+----------------------+----------------------+------+")
+
+# 6. Qual o número de conhecidos dos conhecidos (usando ConheceNormalizada) para cada integrante do grupo?
+def showCountConhecidosDeConhecidos():
+    formatTemplate = "| {0:20} | {1:>4} |"
+    
+    query = "SELECT loginA, count(loginB) FROM (SELECT DISTINCT CN1.loginA, CN2.loginB FROM ConheceNormalizada AS CN1, ConheceNormalizada AS CN2 WHERE (CN1.loginB = CN2.loginA) AND (CN1.loginA <> CN2.loginB)) AS temp GROUP BY loginA"
+    db.execute(query)
+    result = db.fetchall()
+
+    print("+----------------------+------+")
+    print(formatTemplate.format("Usuário","Num"))
+    print("+----------------------+------+")
+    for row in result:
+        print(formatTemplate.format(row[0],row[1]))
+    print("+----------------------+------+")
     
 # 7. Construa um gráfico para a função f(x) = número de pessoas que curtiram exatamente x filmes. 
 def graphPeopleXMovies():
@@ -219,55 +201,61 @@ def graphMoviesXPeople():
     plt.xticks(range(1,numeroCurtidas[len(numeroCurtidas)-1]+1))
     
     plt.show()
+
 # ================================================================================
 # Interface
 # ================================================================================
 
-graphMoviesXPeople()
+menu = True
+while menu:
+    print("\n[1] Exibir média e desvio padrão de ratings")
+    print("[2] Exibir artistas ou filmes com maior rating médio")
+    print("[3] Exibir top10 artistas ou filmes mais populares")
+    print("[4] Criar view de relacionamentos simétricos")
+    print("[5] Exibir conhecidos com maior número de filmes em comum")
+    print("[6] Exibir número de conhecidos de conhecidos para cada usuário")
+    print("[7] Exibir gráfico de pessoas por números de filmes curtidos")
+    print("[8] Exibir gráfico de números de filmes curtidos por pessoas")
+    print("[9] ...")
+    print("[10] ...")
+    print("[11] Sair") 
 
-##menu = True
-##while menu:
-##    print("\n[1] Exibir média e desvio padrão de ratings")
-##    print("[2] Exibir artistas ou filmes com maior rating médio")
-##    print("[3] Exibir top10 artistas ou filmes mais populares")
-##    print("[4] Exibir relacionamentos simetricamente")
-##    print("[5] Exibir conhecidos com maior número de filmes em comum")
-##    print("[6] Exibir conhecidos de conhecidos para cada usuário")
-##    print("[7] Exibir gráfico de pessoas por números de filmes curtidos")
-##    print("[8] Exibir gráfico de números de filmes curtidos por pessoas")
-##    print("[9] ...")
-##    print("[10] ...")
-##    print("[11] Sair") 
-##
-##    case = raw_input("Digite uma opção: ") # Apenas input() em Python3
-##    if case == "1":
-##        print("Opção escolhida: [1] Exibir média e desvio padrão de ratings")
-##        showAvgDev()
-##    elif case == "2":
-##        print("Opção escolhida: [2] Exibir artistas ou filmes com maior rating médio")
-##    elif case == "3":
-##        print("Opção escolhida: [3] Exibir top10 artistas ou filmes mais populares")
-##    elif case == "4":
-##        print("Opção escolhida: [4] Exibir relacionamentos simetricamente")
-##    elif case == "5":
-##        print("Opção escolhida: [5] Exibir conhecidos com maior número de filmes em comum")
-##    elif case == "6":
-##        print("Opção escolhida: [6] Exibir conhecidos de conhecidos para cada usuário")
-##    elif case == "7":
-##        print("Opção escolhida: [7] Exibir gráfico de pessoas por números de filmes curtidos")
-##    elif case == "8":
-##        print("Opção escolhida: [8] Exibir gráfico de números de filmes curtidos por pessoas")
-##    elif case == "9":
-##        print("Opção escolhida: [9] ")
-##    elif case == "10":
-##        print("Opção escolhida: [10] ")
-##    elif case == "11":
-##        menu = False
-##    else:
-##        print("Opção inválida")
-##
-##if not db.is_closed():
-##    db.close()
+    case = input("Digite uma opção: ") # Apenas input() em Python3
+    if case == "1":
+        print("Opção escolhida: [1] Exibir média e desvio padrão de ratings")
+        showArtistaAvgDev()
+        showFilmeAvgDev()
+    elif case == "2":
+        print("Opção escolhida: [2] Exibir artistas ou filmes com maior rating médio")
+        showArtista2orMoreLikes()
+        showFilme2orMoreLikes()
+    elif case == "3":
+        print("Opção escolhida: [3] Exibir top10 artistas ou filmes mais populares")
+        showArtistaTop10()
+        showFilmeTop10()
+    elif case == "4":
+        print("Opção escolhida: [4] Criar view de relacionamentos simétricos")
+        createViewConheceNormalizada()
+    elif case == "5":
+        print("Opção escolhida: [5] Exibir conhecidos com maior número de filmes em comum")
+        showTopConhecidosMsmFilmes()
+    elif case == "6":
+        print("Opção escolhida: [6] Exibir número de conhecidos de conhecidos para cada usuário")
+        showCountConhecidosDeConhecidos()
+    elif case == "7":
+        print("Opção escolhida: [7] Exibir gráfico de pessoas por números de filmes curtidos")
+        graphPeopleXMovies()
+    elif case == "8":
+        print("Opção escolhida: [8] Exibir gráfico de números de filmes curtidos por pessoas")
+        graphMoviesXPeople()
+    elif case == "9":
+        print("Opção escolhida: [9] ")
+    elif case == "10":
+        print("Opção escolhida: [10] ")
+    elif case == "11":
+        menu = False
+    else:
+        print("Opção inválida")
 
 db.close()
 conn.close()
