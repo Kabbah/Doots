@@ -201,7 +201,21 @@ def graphMoviesXPeople():
     plt.xticks(range(1,numeroCurtidas[len(numeroCurtidas)-1]+1))
     
     plt.show()
+    
+# 9. Criado: Os 10 usuários que são mais conhecidos pelos outros
+def top10MostKnown():
+    query = "SELECT \"loginConhecido\", count(\"loginSujeito\") FROM UsuarioConhece GROUP BY \"loginConhecido\" ORDER BY count(\"loginSujeito\") DESC LIMIT 10"
+    db.execute(query)
+    result = db.fetchall()
 
+    formatTemplate = "| {0:20} | {1:>3} |"
+    print("+----------------------+-----+")
+    print(formatTemplate.format("Usuário","Num"))
+    print("+----------------------+-----+")
+    for row in result:
+        print(formatTemplate.format(row[0],row[1]))
+    print("+----------------------+-----+")
+    
 # ================================================================================
 # Interface
 # ================================================================================
@@ -216,7 +230,7 @@ while menu:
     print("[6] Exibir número de conhecidos de conhecidos para cada usuário")
     print("[7] Exibir gráfico de pessoas por números de filmes curtidos")
     print("[8] Exibir gráfico de números de filmes curtidos por pessoas")
-    print("[9] ...")
+    print("[9] Exibir os 10 usuários mais conhecidos")
     print("[10] ...")
     print("[11] Sair") 
 
@@ -249,7 +263,8 @@ while menu:
         print("Opção escolhida: [8] Exibir gráfico de números de filmes curtidos por pessoas")
         graphMoviesXPeople()
     elif case == "9":
-        print("Opção escolhida: [9] ")
+        print("Opção escolhida: [9] Exibir os 10 usuários mais conhecidos")
+        top10MostKnown()
     elif case == "10":
         print("Opção escolhida: [10] ")
     elif case == "11":
