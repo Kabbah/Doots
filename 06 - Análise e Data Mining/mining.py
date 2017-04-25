@@ -215,6 +215,21 @@ def top10MostKnown():
     for row in result:
         print(formatTemplate.format(row[0],row[1]))
     print("+----------------------+-----+")
+
+# 10. Criado: Pessoas com mais probabilidade de expansão da network social
+# Em outras palavras: Contagem de conhecidos de conhecidos, os quais não são conhecidos diretos
+def numberOfSuggestionsForEachUser():
+    query = "SELECT loginA, count(loginB) FROM (SELECT DISTINCT CN1.loginA, CN2.loginB FROM ConheceNormalizada AS CN1, ConheceNormalizada AS CN2 WHERE (CN1.loginB = CN2.loginA) AND (CN1.loginA <> CN2.loginB) AND CN2.loginB NOT IN (SELECT \"loginConhecido\" FROM UsuarioConhece WHERE \"loginSujeito\" = CN1.loginA)) AS temp GROUP BY loginA ORDER BY count(loginB) DESC"
+    db.execute(query)
+    result = db.fetchall()
+
+    formatTemplate = "| {0:20} | {1:>3} |"
+    print("+----------------------+-----+")
+    print(formatTemplate.format("Usuário","Num"))
+    print("+----------------------+-----+")
+    for row in result:
+        print(formatTemplate.format(row[0],row[1]))
+    print("+----------------------+-----+")
     
 # ================================================================================
 # Interface
@@ -231,7 +246,7 @@ while menu:
     print("[7] Exibir gráfico de pessoas por números de filmes curtidos")
     print("[8] Exibir gráfico de números de filmes curtidos por pessoas")
     print("[9] Exibir os 10 usuários mais conhecidos")
-    print("[10] ...")
+    print("[10] Exibir pessoas com mais probabilidade de expansão da network social")
     print("[11] Sair") 
 
     case = input("Digite uma opção: ") # Apenas input() em Python3
@@ -266,7 +281,8 @@ while menu:
         print("Opção escolhida: [9] Exibir os 10 usuários mais conhecidos")
         top10MostKnown()
     elif case == "10":
-        print("Opção escolhida: [10] ")
+        print("Opção escolhida: [10] Exibir pessoas com mais probabilidade de expansão da network social")
+        numberOfSuggestionsForEachUser()
     elif case == "11":
         menu = False
     else:
