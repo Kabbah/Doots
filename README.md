@@ -43,9 +43,9 @@ Aprender todos os processos envolvidos na criação de uma rede social, tais com
 - O que já produzimos (protótipos, esquemas de telas, teste de codificação de partes críticas, etc.)?
 Por enquanto, somente a modelagem do banco de dados está pronta.
 
-Para cada integrante do grupo:
+#Questões relacionadas a cada integrante do grupo
 
-###Victor Barpp Gomes
+##Victor Barpp Gomes
 - Qual o seu foco na implementação do trabalho?
 
 Como estou mais familiarizado com a parte de banco de dados devido ao curso técnico que fiz, meu foco será explorar ferramentas novas para expandir meu "repertório".
@@ -56,7 +56,7 @@ Já fiz um projeto Web utilizando HTML, CSS e PHP, mas dessa vez (como disse ant
 
 Para falar a verdade, tenho interesse no trabalho como um todo, talvez um pouco mais na parte de back-end.
 
-###Angelo Borsoi Ross
+##Angelo Borsoi Ross
 - Qual o seu foco na implementação do trabalho?
 
 Meu esforço será focado na parte front end do trabalho, como já tenho vários conhecimentos de banco de dados e integrações devido ao curso técnico. Também planejo tentar fazer o host quando chegar a hora.
@@ -67,7 +67,7 @@ Já tenho experiência com SQL e MySQL em geral, além de conhecimento em HTML, 
 
 Principalmente a parte front end, já que é a parte em que tenho menos conhecimento e é tão importante quanto qualquer parte do projeto. Além do mais, aprender a fazer uma boa interface (com integração mobile e boa responsividade) é uma boa habilidade para se ter.
 
-###Gustavo Timmermans Pires da Silva
+##Gustavo Timmermans Pires da Silva
 - Qual o seu foco na implementação do trabalho?
 
 Eu não tenho muita experiência em criação de aplicativos web, nem com banco de dados fora das aulas. Por isso, pretendo focar principalmente na criação/manipulação do banco de dados, assim como acompanhar o desenvolvimento dos ambientes virtuais, já que a comunicação de dados através da internet está sendo vista em outra matéria.
