@@ -16,8 +16,7 @@ Uma rede social com foco em compartilhamento de memes. Os usuários serão capaz
 
 - Quais tecnologias vamos utilizar?  
 
-Utilizaremos tecnologias Web (HTML, CSS, JS, PHP, AJAX) para desenvolvimento da aplicação, e o SGBD MariaDB (similar a MySQL) para o banco de dados. Poderemos utilizar frameworks como Angular ou Bootstrap.
-
+Utilizaremos tecnologias Web (HTML, CSS, JS, PHP, AJAX) para desenvolvimento da aplicação, e o SGBD MariaDB (similar a MySQL) para o banco de dados. Utilizaremos a stylesheet pré-construída W3.css.
 - Por que decidimos pelo tema?
 
 Meme é uma forma de compartilhamento de informações muito utilizada atualmente na Internet, principalmente devido a sua abordagem cômica de assuntos do dia-a-dia. Tendo isso em vista, surgiu a ideia do tema do trabalho: criar uma rede social focada especificamente em memes.
