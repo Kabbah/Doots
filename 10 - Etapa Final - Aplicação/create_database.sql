@@ -1,44 +1,41 @@
 CREATE TABLE Usuario (
-	id INT,
-	login VARCHAR(255) NOT NULL,
+	id INT AUTO_INCREMENT,
+	login VARCHAR(255) NOT NULL UNIQUE,
 	senha VARCHAR(255) NOT NULL,
-	email VARCHAR(255) NOT NULL,
-	avatar VARCHAR(255),
-	doots,
-	dataJoin DATE,
-	deletado BOOLEAN,
+	email VARCHAR(255) NOT NULL UNIQUE,
+	avatar VARCHAR(255) DEFAULT 'avatar.png',
+	doots INT NOT NULL DEFAULT 0,
+	dataJoin DATE NOT NULL DEFAULT GETDATE(),
+	deletado BOOLEAN NOT NULL DEFAULT FALSE,
 	
 	PRIMARY KEY (id)
 );
 
 /* Usuario(*ID*, login, senha, email, avatar, doots, dataJoin, deletado) */
 
-
-
 CREATE TABLE Meme (
-	id INT,
-	dataHora TIMESTAMP,
-	arquivo VARCHAR(255),
-	titulo VARCHAR(255),
-	doots,
-	deletado BOOLEAN,
-	poster INT,
+	id INT AUTO_INCREMENT,
+	dataHora DATETIME NOT NULL DEFAULT GETDATE(),
+	arquivo VARCHAR(255) NOT NULL,
+	titulo VARCHAR(255) NOT NULL,
+	doots INT NOT NULL DEFAULT 0,
+	deletado BOOLEAN NOT NULL DEFAULT FALSE,
+	poster INT NOT NULL,
 	
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
 	FOREIGN KEY (poster) REFERENCES Usuario(id)
 );
 
 /* Meme(*ID*, dataHora, arquivo, titulo, doots, deletado, poster)
     poster -> Usuario(ID) */
-
-	
 	
 CREATE TABLE MemeDoot (
 	idMeme INT,
 	idUsuario INT,
-	updoot INT,
+	updoot BOOLEAN NOT NULL,
 	
-	FOREIGN KEY (idMeme) REFERENCES Meme(id)
+    PRIMARY KEY (idMeme, idUsuario),
+	FOREIGN KEY (idMeme) REFERENCES Meme(id),
 	FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
 );
 	
@@ -49,19 +46,19 @@ CREATE TABLE MemeDoot (
 	
 	
 CREATE TABLE Comentario (
-	id INT,
-	conteudo VARCHAR(255),
-	conteudoOri VARCHAR(255),
-	doots VARCHAR(255),
-	dataHora TIMESTAMP,
-	editado BOOLEAN,
-	deletado BOOLEAN,
-	dataHoraEdit TIMESTAMP,
-	idUsuario INT,
-	idMeme INT,
+	id INT AUTO_INCREMENT,
+	conteudo VARCHAR(255) NOT NULL,
+	conteudoOri VARCHAR(255) NOT NULL,
+	doots VARCHAR(255) NOT NULL DEFAULT 0,
+	dataHora DATETIME NOT NULL DEFAULT GETDATE(),
+	editado BOOLEAN NOT NULL DEFAULT FALSE,
+	deletado BOOLEAN NOT NULL DEFAULT FALSE,
+	dataHoraEdit DATETIME,
+	idUsuario INT NOT NULL,
+	idMeme INT NOT NULL,
 	
-	PRIMARY KEY (id)
-	FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
+	PRIMARY KEY (id),
+	FOREIGN KEY (idUsuario) REFERENCES Usuario(id),
 	FOREIGN KEY (idMeme) REFERENCES Meme(id)
 );
 	
@@ -74,8 +71,10 @@ CREATE TABLE Comentario (
 CREATE TABLE ComentarioDoot (
 	idComentario INT,
 	idUsuario INT,
-	
-	FOREIGN KEY (idComentario) REFERENCES Comentario(id)
+	updoot BOOLEAN NOT NULL,
+    
+    PRIMARY KEY (idComentario, idUsuario),
+	FOREIGN KEY (idComentario) REFERENCES Comentario(id),
 	FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
 );
 	
@@ -86,9 +85,9 @@ CREATE TABLE ComentarioDoot (
 	
 	
 CREATE TABLE Reacao (
-	id INT,
-	label VARCHAR(255),
-	imagem VARCHAR(255),
+	id INT AUTO_INCREMENT,
+	label VARCHAR(255) NOT NULL UNIQUE,
+	imagem VARCHAR(255) NOT NULL,
 	
 	PRIMARY KEY(id)
 );
@@ -102,8 +101,9 @@ CREATE TABLE MemeReacao (
 	idUsuario INT,
 	idReacao INT,
 
-	FOREIGN KEY (idMeme) REFERENCES Meme(id)
-	FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
+    PRIMARY KEY (idMeme, idUsuario, idReacao),
+	FOREIGN KEY (idMeme) REFERENCES Meme(id),
+	FOREIGN KEY (idUsuario) REFERENCES Usuario(id),
 	FOREIGN KEY (idReacao) REFERENCES idReacao(id)
 );
 
@@ -119,8 +119,9 @@ CREATE TABLE ComentarioReacao (
 	idUsuario INT,
 	idReacao INT,
 	
-	FOREIGN KEY (idMeme) REFERENCES Meme(id)
-	FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
+    PRIMARY KEY (idComentario, idUsuario, idReacao),
+	FOREIGN KEY (idComentario) REFERENCES Comentario(id),
+	FOREIGN KEY (idUsuario) REFERENCES Usuario(id),
 	FOREIGN KEY (idReacao) REFERENCES idReacao(id)
 );
 
