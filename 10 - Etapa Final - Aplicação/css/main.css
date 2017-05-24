@@ -1,0 +1,22 @@
+.login-wrapper {
+    max-width: 80%;
+    min-width: 385px;
+    position: absolute;
+    margin-top: 32px;
+    left: 50%;
+    transform:translate(-50%,0%);
+    -ms-transform:translate(-50%,0%);
+}
+
+.form-submit-button {
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
+.form-pad {
+    padding-bottom: 38px;
+}
+
+html {
+  overflow-y: scroll;
+}
