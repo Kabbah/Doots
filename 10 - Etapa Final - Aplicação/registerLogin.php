@@ -38,39 +38,39 @@
             <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" id="login" method="post" action="processLogin.php">
                 <br/>
                 <label class="w3-text-purple"><b>Usuário</b></label>
-                <input class="w3-input w3-border" type="text" name="login">
+                <input class="w3-input w3-border" type="text" name="login" required>
                 
 
                 <label class="w3-text-purple"><b>Senha</b></label>
-                <input class="w3-input w3-border" type="password" name="password">
+                <input class="w3-input w3-border" type="password" name="password" required>
                 
                 <br/>
                 <input class="w3-button w3-purple form-submit-button" type="submit" value="Entrar">
             </form>
             
-            <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" id="register" style="display:none" method="post">
+            <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" id="register" style="display:none" method="post" action="processRegister.php">
                 <br/>
                 <label class="w3-text-purple"><b>Usuário</b></label>
-                <input class="w3-input w3-border" type="text" name="login" placeholder="Usuario">
+                <input class="w3-input w3-border" type="text" name="login" placeholder="Usuario" required>
                 
                 <br/>
                 <label class="w3-text-purple"><b>Email</b></label>
-                <input class="w3-input w3-border" type="email" name="email" placeholder="email@exemplo.com">
+                <input class="w3-input w3-border" type="email" name="email" placeholder="email@exemplo.com" required>
                 
                 <br/>
                 <label class="w3-text-purple"><b>Confirmar Email</b></label>
-                <input class="w3-input w3-border" type="email" name="confirm-email" placeholder="email@exemplo.com">
+                <input class="w3-input w3-border" type="email" name="confirm-email" placeholder="email@exemplo.com" required>
                 
                 <br/>
                 <label class="w3-text-purple"><b>Senha</b></label>
-                <input class="w3-input w3-border" type="password" name="password" placeholder="&#9679&#9679&#9679&#9679&#9679">
+                <input class="w3-input w3-border" type="password" name="password" placeholder="&#9679&#9679&#9679&#9679&#9679" required>
                 
                 <br/>
                 <label class="w3-text-purple"><b>Corfirmar Senha</b></label>
-                <input class="w3-input w3-border" type="password" name="confirm-password" placeholder="&#9679&#9679&#9679&#9679&#9679">
+                <input class="w3-input w3-border" type="password" name="confirm-password" placeholder="&#9679&#9679&#9679&#9679&#9679" required>
                 
                 <br/>
-                <input class="w3-check" type="checkbox" name="tos">
+                <input class="w3-check" type="checkbox" name="tos" required>
                 <label>Eu li e concordo com os <a href="#">Termos de Serviço</a></label>
                 
                 <br/>

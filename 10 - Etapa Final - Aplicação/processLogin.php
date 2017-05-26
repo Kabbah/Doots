@@ -20,7 +20,7 @@ $stmt->fetch();
 if($stmt->num_rows == 1 && password_verify($_POST['password'], $senha)) {
     // Seta as variáveis de sessão.
     $_SESSION['login_user'] = $login;
-    header("Location: index.html");
+    header("Location: logado.php");
     exit;
 }
 else {
