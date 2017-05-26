@@ -31,6 +31,36 @@
             <h1 class="w3-left">Doots</h1>
         </header>
         <div class="login-wrapper">
+            <?php
+                if (isset($_COOKIE["campoVazio"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['campoVazio'] . '</b></p>';
+                }
+                if (isset($_COOKIE["loginInvalido"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['loginInvalido'] . '</b></p>';
+                }
+                if (isset($_COOKIE["tos"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['tos'] . '</b></p>';
+                }
+                if (isset($_COOKIE["loginLongo"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['loginLongo'] . '</b></p>';
+                }
+                if (isset($_COOKIE["confirmacaoEmail"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['confirmacaoEmail'] . '</b></p>';
+                }
+                if (isset($_COOKIE["confirmacaoPassword"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['confirmacaoPassword'] . '</b></p>';
+                }
+                if (isset($_COOKIE["usuarioExiste"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['usuarioExiste'] . '</b></p>';
+                }
+                if (isset($_COOKIE["emailExiste"])){
+                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['emailExiste'] . '</b></p>';
+                }
+                if (isset($_COOKIE["registroSucesso"])){
+                    echo '<p class="w3-panel w3-green"><b>' . $_COOKIE['registroSucesso'] . '</b></p>';
+                }
+            
+            ?>
             <div class="form-pad w3-dark-gray">
                 <button class="w3-button w3-half tab w3-black" onclick="changeTab(event, 'login')">Login</button>
                 <button class="w3-button w3-half tab" onclick="changeTab(event, 'register')">Registrar</button>

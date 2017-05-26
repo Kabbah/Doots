@@ -7,6 +7,8 @@ session_start();
 if($_POST["login"] == "" || $_POST["password"] == "") {
     setcookie("campoVazio", "Nome de usuário ou senha inválido(s).", time() + 10);
     header("Location: registerLogin.php");
+    $conn->close();
+    exit();
 }
 
 // Prepara o query SQL
