@@ -5,7 +5,7 @@ CREATE TABLE Usuario (
 	email VARCHAR(255) NOT NULL UNIQUE,
 	avatar VARCHAR(255) DEFAULT 'avatar.png',
 	doots INT NOT NULL DEFAULT 0,
-	dataJoin DATE NOT NULL DEFAULT GETDATE(),
+	dataJoin DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	deletado BOOLEAN NOT NULL DEFAULT FALSE,
 	
 	PRIMARY KEY (id)
@@ -15,7 +15,7 @@ CREATE TABLE Usuario (
 
 CREATE TABLE Meme (
 	id INT AUTO_INCREMENT,
-	dataHora DATETIME NOT NULL DEFAULT GETDATE(),
+	dataHora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	arquivo VARCHAR(255) NOT NULL,
 	titulo VARCHAR(255) NOT NULL,
 	doots INT NOT NULL DEFAULT 0,
@@ -50,7 +50,7 @@ CREATE TABLE Comentario (
 	conteudo VARCHAR(255) NOT NULL,
 	conteudoOri VARCHAR(255) NOT NULL,
 	doots VARCHAR(255) NOT NULL DEFAULT 0,
-	dataHora DATETIME NOT NULL DEFAULT GETDATE(),
+	dataHora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	editado BOOLEAN NOT NULL DEFAULT FALSE,
 	deletado BOOLEAN NOT NULL DEFAULT FALSE,
 	dataHoraEdit DATETIME,
@@ -104,7 +104,7 @@ CREATE TABLE MemeReacao (
     PRIMARY KEY (idMeme, idUsuario, idReacao),
 	FOREIGN KEY (idMeme) REFERENCES Meme(id),
 	FOREIGN KEY (idUsuario) REFERENCES Usuario(id),
-	FOREIGN KEY (idReacao) REFERENCES idReacao(id)
+	FOREIGN KEY (idReacao) REFERENCES Reacao(id)
 );
 
 /* MemeReacao(*IDMeme*, *IDUsuario*, *IDReacao*)
@@ -122,7 +122,7 @@ CREATE TABLE ComentarioReacao (
     PRIMARY KEY (idComentario, idUsuario, idReacao),
 	FOREIGN KEY (idComentario) REFERENCES Comentario(id),
 	FOREIGN KEY (idUsuario) REFERENCES Usuario(id),
-	FOREIGN KEY (idReacao) REFERENCES idReacao(id)
+	FOREIGN KEY (idReacao) REFERENCES Reacao(id)
 );
 
 /* ComentarioReacao(*IDComentario*, *IDUsuario*, *IDReacao*)
