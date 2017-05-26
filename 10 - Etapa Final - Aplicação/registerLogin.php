@@ -35,7 +35,7 @@
                 <button class="w3-button w3-half tab w3-black" onclick="changeTab(event, 'login')">Login</button>
                 <button class="w3-button w3-half tab" onclick="changeTab(event, 'register')">Registrar</button>
             </div>
-            <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" id="login" method="post">
+            <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" id="login" method="post" action="processLogin.php">
                 <br/>
                 <label class="w3-text-purple"><b>Usuário</b></label>
                 <input class="w3-input w3-border" type="text" name="login">
