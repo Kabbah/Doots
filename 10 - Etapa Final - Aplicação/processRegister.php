@@ -37,20 +37,24 @@
     $query = $conn->prepare("SELECT login FROM Usuario WHERE login=?");
     $query->bind_param("s", $_POST["login"]);
     $query->execute();
+    $query->store_result();
 
     if ($query->num_rows > 0) {
         setcookie("usuarioExiste", "O nome de usuário inserido já existe. Escolha outro nome");
         $erro = true;
     }
-
+    $query->close();
+        
     $query = $conn->prepare("SELECT email FROM Usuario WHERE email=?");
     $query->bind_param("s", $_POST["email"]);
     $query->execute();
+    $query->store_result();
 
     if ($query->num_rows > 0) {
         setcookie("emailExiste", "O email inserido já está cadastrado. Use outro email");
         $erro = true;
     }
+    $query->close();
 
     if($erro == true){
         header("location: registerLogin.php");
@@ -60,7 +64,7 @@
 
     $senha = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-    $query = $conn->prepare("INSERT INTO Usuario(login, senha, email) VALUES (?, ?, ?)")
+    $query = $conn->prepare("INSERT INTO Usuario(login, senha, email) VALUES (?, ?, ?)");
     $query->bind_param("sss", $_POST["login"], $senha, $_POST["email"]);
     if ($query->execute() == true){
         setcookie("registroSucesso", "Conta criada com sucesso!", time()+10);

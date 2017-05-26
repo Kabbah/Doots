@@ -13,18 +13,19 @@ if($_POST["login"] == "" || $_POST["password"] == "") {
 $stmt = $conn->prepare("SELECT senha FROM Usuario WHERE login=?");
 $stmt->bind_param("s", $_POST['login']);
 $stmt->execute();
+$stmt->store_result();
 
 $stmt->bind_result($senha);
 $stmt->fetch();
 
 if($stmt->num_rows == 1 && password_verify($_POST['password'], $senha)) {
     // Seta as variáveis de sessão.
-    $_SESSION['login_user'] = $login;
+    $_SESSION['login'] = $_POST["login"];
     header("Location: logado.php");
-    exit;
 }
 else {
     setcookie("loginInvalido", "Nome de usuário ou senha inválido(s).", time() + 10);
+    header("Location: registerLogin.php");
 }
 
 $stmt->close();
