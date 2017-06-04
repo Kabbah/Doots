@@ -12,7 +12,7 @@ session_start();
         if(isset($_SESSION['login'])) {
             echo '<div class="w3-right">
                     <h2 class="welcome">Bem vindo '.$_SESSION['login'].'</h2>
-                    <img class="avatar welcome" src="avatares/avatar.png" class="w3-round" alt="Avatar">
+                    <img class="avatar welcome" src="avatares/'.$_SESSION['avatar']." class="w3-round" alt="Avatar">
                     <a href="settings.php"><img class="welcome" id="cog" src="imagens/cog.png" alt="cog"></a>
                 </div>';
         }
