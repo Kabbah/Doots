@@ -12,17 +12,19 @@ if($_POST["login"] == "" || $_POST["password"] == "") {
 }
 
 // Prepara o query SQL
-$stmt = $conn->prepare("SELECT senha FROM Usuario WHERE login=?");
+$stmt = $conn->prepare("SELECT id, senha, avatar FROM Usuario WHERE login=?");
 $stmt->bind_param("s", $_POST['login']);
 $stmt->execute();
 $stmt->store_result();
 
-$stmt->bind_result($senha);
+$stmt->bind_result($id, $senha, $avatar);
 $stmt->fetch();
 
 if($stmt->num_rows == 1 && password_verify($_POST['password'], $senha)) {
     // Seta as variáveis de sessão.
+    $_SESSION["id"] = $id;
     $_SESSION['login'] = $_POST["login"];
+    $_SESSION["avatar"] = $avatar;
     header("Location: logado.php");
 }
 else {
