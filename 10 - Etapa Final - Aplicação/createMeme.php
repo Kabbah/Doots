@@ -8,7 +8,7 @@ if(!isset($_SESSION["login"])) {
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <title>Login ou Registro</title>
+        <title>Postar um Meme</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/w3.css">
@@ -16,14 +16,25 @@ if(!isset($_SESSION["login"])) {
     </head>
     
     <body>
-        <header class="w3-container w3-purple">
-            <h1 class="w3-left">Você logou como <?php echo $_SESSION["login"];?></h1>
-        </header>
-        <div>
+        <?php
+            require('banner.php');
+        
+            if (isset($_COOKIE["tituloVazio"])){
+                 echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['tituloVazio'] . '</b></p></div>';
+            }
+            if (isset($_COOKIE["memeVazio"])){
+                  echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['memeVazio'] . '</b></p></div>';
+            }
+        ?>
+        <div class="create-wrapper">
+            
+            <h2 class="w3-purple form-title">Postar um Meme</h2>
             <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" method="post" enctype="multipart/form-data" action="processMeme.php">
+                <br/>
                 <label class="w3-text-purple"><b>Título</b></label>
                 <input class="w3-input w3-border" type="text" name="titulo" required>
                 
+                <br/>
                 <label class="w3-text-purple"><b>Imagem</b></label>
                 <input class="w3-input w3-border" type="file" name="imagem" required>
                 

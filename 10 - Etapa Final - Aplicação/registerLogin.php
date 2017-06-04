@@ -27,37 +27,37 @@
     </head>
     
     <body>
-        <header class="w3-container w3-purple">
-            <h1 class="w3-left">Doots</h1>
-        </header>
+        <?php
+            require('banner.php');
+        ?>
         <div class="login-wrapper">
             <?php
                 if (isset($_COOKIE["campoVazio"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['campoVazio'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['campoVazio'] . '</b></p>';
                 }
                 if (isset($_COOKIE["loginInvalido"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['loginInvalido'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['loginInvalido'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["tos"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['tos'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['tos'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["loginLongo"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['loginLongo'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['loginLongo'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["confirmacaoEmail"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['confirmacaoEmail'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['confirmacaoEmail'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["confirmacaoPassword"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['confirmacaoPassword'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['confirmacaoPassword'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["usuarioExiste"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['usuarioExiste'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['usuarioExiste'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["emailExiste"])){
-                    echo '<p class="w3-panel w3-red"><b>' . $_COOKIE['emailExiste'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['emailExiste'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["registroSucesso"])){
-                    echo '<p class="w3-panel w3-green"><b>' . $_COOKIE['registroSucesso'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-green"><b>' . $_COOKIE['registroSucesso'] . '</b></p></div>';
                 }
             
             ?>

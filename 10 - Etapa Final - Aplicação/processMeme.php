@@ -1,10 +1,20 @@
 <?php
 
 session_start();
+$deuboa = true;
 
-if($_POST["titulo"] == "") {
-    setcookie("tituloVazio", "Seu meme precisa de um título.", time() + 10);
-    header("Location: registerLogin.php");
+if($_POST['titulo'] == "") {
+    setcookie("tituloVazio", "Seu meme precisa de um título", time() + 10);
+    $deuboa = false;
+}
+
+if (empty($_FILES['imagem']['name'])) {
+    setcookie("memeVazio", "Você deve fazer upload de uma imagem. E pare de mexer no HTML!", time() + 10);
+    $deuboa = false;
+}
+
+if(!$deuboa) {
+    header("location:creatememe.php");
     exit();
 }
 
@@ -15,7 +25,7 @@ $pasta = "memes/";
 $arquivo = md5(basename($_FILES["imagem"]["name"]) . $_SESSION["login"] . time()) . ".$tipo";
 $caminho = $pasta . $arquivo;
 
-$deuboa = 1;
+$deuboa = true;
 
 // TODO: colocar cookies nas coisas.
 // TODO: fazer redirects.
@@ -23,28 +33,28 @@ $deuboa = 1;
 // Imagem falsa
 $tamanho = getimagesize($_FILES["imagem"]["tmp_name"]);
 if($tamanho === false) {
-    $deuboa = 0;
+    $deuboa = false;
 }
 
 // Conflito de nomes
 if(file_exists($caminho)) {
-    $deuboa = 0;
+    $deuboa = false;
 }
 
 // Imagem muito grande
 if($_FILES["imagem"]["size"] > 500000) {
-    $deuboa = 0;
+    $deuboa = false;
 }
 
 // Imagem em formato inadequado
 if($tipo != "jpg" && $tipo != "jpeg" && $tipo != "png" && $tipo != "gif" && $tipo != "svg") {
-    $deuboa = 0;
+    $deuboa = false;
 }
 
 if($deuboa) {
     if(move_uploaded_file($_FILES["imagem"]["tmp_name"], $caminho)) {
         // Upload deu boa
-        require "dbConn.php";
+        require ("dbConn.php");
         
         $stmt = $conn->prepare("INSERT INTO Meme(arquivo, titulo, poster) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $arquivo, $_POST["titulo"], $_SESSION["id"]);
