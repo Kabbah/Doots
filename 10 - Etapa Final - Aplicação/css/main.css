@@ -1,8 +1,8 @@
-.login-wrapper {
+.create-wrapper, .login-wrapper {
     max-width: 80%;
     min-width: 385px;
     position: absolute;
-    margin-top: 32px;
+    margin-top: 16px;
     left: 50%;
     transform:translate(-50%,0%);
     -ms-transform:translate(-50%,0%);
@@ -17,9 +17,13 @@
     padding-bottom: 38px;
 }
 
-.logo {
+.form-title {
+    margin-bottom: 0;
+    padding-left: 6px;
+}
+
+a {
     text-decoration: none;
-    color: white;
 }
 
 .welcome{
@@ -33,6 +37,19 @@
     height: 64px;
     width: 64px;
     object-fit: cover;
+}
+
+.error {
+    max-width: 60%;
+    margin: 0;
+    left: 50%;
+    position: relative;
+    transform:translate(-50%,0%);
+    -ms-transform:translate(-50%,0%);
+}
+.error p{
+    padding: 6px;
+    text-align: center;
 }
 
 #cog {
