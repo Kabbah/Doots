@@ -17,6 +17,29 @@
     padding-bottom: 38px;
 }
 
+.logo {
+    text-decoration: none;
+    color: white;
+}
+
+.welcome{
+    margin-top: 6px;
+    margin-bottom: 6px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.avatar {
+    height: 64px;
+    width: 64px;
+    object-fit: cover;
+}
+
+#cog {
+    height: 32px;
+    width: 32px;
+}
+
 html {
   overflow-y: scroll;
 }
