@@ -8,6 +8,11 @@ if($_POST['titulo'] == "") {
     $deuboa = false;
 }
 
+if(!isset($_FILES['imagem'])) {
+    setcookie("memeVazio", "Não foi feito o upload para o servidor. Provavelmente o servidor rejeitou o arquivo por ser muito grande.", time() + 10);
+    $deuboa = false;
+}
+
 if (empty($_FILES['imagem']['name'])) {
     setcookie("memeVazio", "Você deve fazer upload de uma imagem. E pare de mexer no HTML!", time() + 10);
     $deuboa = false;
@@ -42,7 +47,7 @@ if(file_exists($caminho)) {
 }
 
 // Imagem muito grande
-if($_FILES["imagem"]["size"] > 500000) {
+if($_FILES["imagem"]["size"] > 10000000) {
     $deuboa = false;
 }
 
@@ -59,10 +64,21 @@ if($deuboa) {
         $stmt = $conn->prepare("INSERT INTO Meme(arquivo, titulo, poster) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $arquivo, $_POST["titulo"], $_SESSION["id"]);
         $stmt->execute();
+        
+        // header("Location: )
     }
     else {
         // Upload não deu boa
+        setcookie("erroUpload", "Ocorreu um erro no upload de seu meme. Tente novamente mais tarde.", time() + 10);
+        header("Location: createMeme.php");
+        exit();
     }
 }
+else {
+    setcookie("erroUpload", "Ocorreu um erro no upload de seu meme. Tente novamente mais tarde.", time() + 10);
+    header("location:creatememe.php");
+    exit();
+}
+
 
 ?>
