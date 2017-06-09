@@ -1,14 +1,14 @@
 <?php
 session_start();
-if(!isset($_SESSION["login"])) {
-    header("Location: registerLogin.php");
+if(!isset($_GET["meme"])) {
+    header("location:logado.php");
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <title>Postar um Meme</title>
+        <title>Postar um Meme - Doots</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/w3.css">
@@ -19,9 +19,8 @@ if(!isset($_SESSION["login"])) {
         <?php
             require('banner.php');
         ?>
-        <div class="create-wrapper">
+        <div>
             <?php
-            if(isset($_GET["meme"])) {
                 require ("dbConn.php");
                 
                 $stmt = $conn->prepare("SELECT Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Meme.deletado, Usuario.login, count(Comentario.id) FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.id = ? LIMIT 1");
@@ -61,7 +60,6 @@ if(!isset($_SESSION["login"])) {
                 }
                 
                 $conn->close();
-            }
             ?>
         </div>
     </body>

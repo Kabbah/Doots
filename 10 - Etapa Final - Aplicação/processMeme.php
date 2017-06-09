@@ -61,7 +61,7 @@ if($deuboa) {
         // Upload deu boa
         require ("dbConn.php");
         
-        $stmt = $conn->prepare("INSERT INTO Meme(arquivo, titulo, poster) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO meme(arquivo, titulo, poster) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $arquivo, $_POST["titulo"], $_SESSION["id"]);
         $stmt->execute();
         

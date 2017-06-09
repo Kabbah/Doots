@@ -25,6 +25,9 @@ if(!isset($_SESSION["login"])) {
             if (isset($_COOKIE["memeVazio"])){
                   echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['memeVazio'] . '</b></p></div>';
             }
+        if (isset($_COOKIE["erroUpload"])){
+                  echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroUpload'] . '</b></p></div>';
+            }
         ?>
         <div class="create-wrapper">
             
