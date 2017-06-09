@@ -1,4 +1,4 @@
-<header class="w3-container w3-purple">
+<header class="w3-container w3-purple banner">
     <h1 class="w3-left"><a class="logo" href="logado.php">Doots</a></h1> <!-- Vai virar uma imagem -->
     <?php
         if(isset($_SESSION['login'])) {

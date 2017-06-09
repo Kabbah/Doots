@@ -1,3 +1,7 @@
+.banner {
+    min-width: 685px;
+}
+
 .create-wrapper, .login-wrapper {
     max-width: 80%;
     min-width: 385px;
@@ -17,16 +21,25 @@
     padding-bottom: 38px;
 }
 
-.form-title {
+.form-title, .meme-title {
     margin-bottom: 0;
-    padding-left: 6px;
+    padding-left: 12px;
 }
 
-a {
-    text-decoration: none;
+.meme-image {
+    background: white;
+    margin: 12px;
+    max-width: inherit;
+    max-height: 600px;
+}
+.meme-image img {
+    object-fit: cover;
+    max-height: inherit;
+    display: block;
+    margin: 0 auto;
 }
 
-.welcome{
+.welcome {
     margin-top: 6px;
     margin-bottom: 6px;
     display: inline-block;
@@ -52,11 +65,23 @@ a {
     text-align: center;
 }
 
+.meme-wrapper {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 16px;
+    min-width: 600px;
+    width: 90%;
+}
+
 #cog {
     height: 32px;
     width: 32px;
 }
 
 html {
-  overflow-y: scroll;
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+a {
+    text-decoration: none;
 }
