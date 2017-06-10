@@ -24,11 +24,24 @@
 .form-title, .meme-title {
     margin-bottom: 0;
     padding-left: 12px;
+    font-size: 32px;
+}
+
+.meme-wrapper {
+    margin-left: 32px;
+    margin-right: 32px;
+    margin-top: 16px;
+    min-width: 600px;
+    padding-bottom: 1px;
+}
+
+.meme-time {
+    margin-left: 12px;
 }
 
 .meme-image {
     background: white;
-    margin: 12px;
+    margin: 0 12px;
     max-width: inherit;
     max-height: 600px;
 }
@@ -37,6 +50,27 @@
     max-height: inherit;
     display: block;
     margin: 0 auto;
+}
+
+.comment-wrapper {
+    margin-left: 12px;
+    margin-right: 12px;
+    color: black;
+    display: block;
+    min-height: 96px;
+}
+.comment-wrapper:last-child {
+    margin-bottom: 16px;
+}
+.comment-wrapper:nth-child(odd){
+    background: white;
+}
+.comment-wrapper:nth-child(even){
+    background: #e6b4ea;
+}
+
+.comment-author {
+    min-width: 78px;
 }
 
 .welcome {
@@ -50,6 +84,8 @@
     height: 64px;
     width: 64px;
     object-fit: cover;
+    display: inline-block;
+    margin: 0 auto;
 }
 
 .error {
@@ -63,14 +99,6 @@
 .error p{
     padding: 6px;
     text-align: center;
-}
-
-.meme-wrapper {
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 16px;
-    min-width: 600px;
-    width: 90%;
 }
 
 #cog {
