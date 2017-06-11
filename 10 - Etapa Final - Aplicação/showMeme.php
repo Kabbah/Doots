@@ -30,6 +30,38 @@ $stmt->close();
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="css/main.css">
+        <script>
+            function updoot() {
+                var memeID = document.getElementsByTagName("button")[0].getAttribute("value");
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() { // Para debug.
+                    if(this.readyState == 4 && this.status == 200) {
+                        document.getElementById("debug").innerHTML = this.responseText;
+                    }
+                }
+                xmlhttp.open("POST", "updoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um updoot, tem que desabilitar o botão (ou fazer ele tirar updoot).
+            }
+            function downdoot() {
+                var memeID = document.getElementsByTagName("button")[0].getAttribute("value");
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() { // Para debug.
+                    if(this.readyState == 4 && this.status == 200) {
+                        document.getElementById("debug").innerHTML = this.responseText;
+                    }
+                }
+                xmlhttp.open("POST", "downdoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um downdoot, tem que desabilitar o botão (ou fazer ele tirar downdoot).
+            }
+        </script>
     </head>
     
     <body>
@@ -42,7 +74,9 @@ $stmt->close();
                 if($arquivo != NULL && $deletado == false) {
                     
                     // Tem que colocar botão pra up/down doot do lado do título
-                    echo '<p class="meme-title">' . $titulo . '</p>' .
+                    echo '<button type="button" value="' . $_GET["meme"] . '" onclick="updoot()">Updoot</button>' .
+                         '<button type="button" value="' . $_GET["meme"] . '" onclick="downdoot()">Downdoot</button>' .
+                         '<p class="meme-title">' . $titulo . '</p>' .
                          '<span class="w3-small meme-time">Postado as ' . date_format(date_create($datahora), "H:i d/m/Y") . ' por ' . $loginUsuario . '</span>' .
                          '<div class="meme-image"><img src="memes/' . $arquivo . '"></div>' .
                          '<div></div>'; // Reservado pra input de comentário
@@ -69,6 +103,7 @@ $stmt->close();
                     }
                     else {
                         echo '<h4 class="comment-wrapper">Ainda não há comentários. Escreva um você! <b>AGORA!</b></h4>';
+                        echo '<p id="debug"></p>';
                     }
                 }
                 else {
