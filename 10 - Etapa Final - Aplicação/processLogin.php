@@ -25,7 +25,7 @@ if($stmt->num_rows == 1 && password_verify($_POST['password'], $senha)) {
     $_SESSION["id"] = $id;
     $_SESSION['login'] = $_POST["login"];
     $_SESSION["avatar"] = $avatar;
-    header("Location: logado.php");
+    header("Location: /");
 }
 else {
     setcookie("loginInvalido", "Nome de usuário ou senha inválido(s).", time() + 10);
