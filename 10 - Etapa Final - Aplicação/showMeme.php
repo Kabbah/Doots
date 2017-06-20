@@ -31,8 +31,8 @@ $stmt->close();
         <link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="css/main.css">
         <script>
-            function updoot() {
-                var memeID = document.getElementsByTagName("button")[0].getAttribute("value");
+            function updoot(btn) {
+                var memeID = btn.value;
                 
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function() { // Para debug.
@@ -44,10 +44,16 @@ $stmt->close();
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xmlhttp.send("memeID=" + memeID);
                 
-                // Depois de fazer um updoot, tem que desabilitar o botão (ou fazer ele tirar updoot).
+                // Depois de fazer um updoot, tem que mudar o botão.
+                btn.innerHTML = "Undo updoot";
+                btn.setAttribute("onclick", "un_updoot(this);");
+                
+                // Também tem que resetar o outro botão.
+                document.getElementById("downbtn" + btn.value).innerHTML = "Downdoot";
+                document.getElementById("downbtn" + btn.value).setAttribute("onclick", "downdoot(this);");
             }
-            function downdoot() {
-                var memeID = document.getElementsByTagName("button")[0].getAttribute("value");
+            function downdoot(btn) {
+                var memeID = btn.value;
                 
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function() { // Para debug.
@@ -59,7 +65,47 @@ $stmt->close();
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xmlhttp.send("memeID=" + memeID);
                 
-                // Depois de fazer um downdoot, tem que desabilitar o botão (ou fazer ele tirar downdoot).
+                // Depois de fazer um downdoot, tem que mudar o botão.
+                btn.innerHTML = "Undo downdoot";
+                btn.setAttribute("onclick", "un_downdoot(this);");
+                
+                // Também tem que resetar o outro botão.
+                document.getElementById("upbtn" + btn.value).innerHTML = "Updoot";
+                document.getElementById("upbtn" + btn.value).setAttribute("onclick", "updoot(this);");
+            }
+            function un_updoot(btn) {
+                var memeID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() { // Para debug.
+                    if(this.readyState == 4 && this.status == 200) {
+                        document.getElementById("debug").innerHTML = this.responseText;
+                    }
+                }
+                xmlhttp.open("POST", "un_updoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um un_updoot, tem que mudar o botão.
+                btn.innerHTML = "Updoot";
+                btn.setAttribute("onclick", "updoot(this);");
+            }
+            function un_downdoot(btn) {
+                var memeID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() { // Para debug.
+                    if(this.readyState == 4 && this.status == 200) {
+                        document.getElementById("debug").innerHTML = this.responseText;
+                    }
+                }
+                xmlhttp.open("POST", "un_downdoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um un_downdoot, tem que mudar o botão.
+                btn.innerHTML = "Downdoot";
+                btn.setAttribute("onclick", "downdoot(this);");
             }
         </script>
     </head>
@@ -74,8 +120,8 @@ $stmt->close();
                 if($arquivo != NULL && $deletado == false) {
                     
                     // Tem que colocar botão pra up/down doot do lado do título
-                    echo '<button type="button" value="' . $_GET["meme"] . '" onclick="updoot()">Updoot</button>' .
-                         '<button type="button" value="' . $_GET["meme"] . '" onclick="downdoot()">Downdoot</button>' .
+                    echo '<button type="button" value="' . $_GET["meme"] . '" onclick="updoot(this);" id="upbtn' . $_GET["meme"] . '">Updoot</button>' .
+                         '<button type="button" value="' . $_GET["meme"] . '" onclick="downdoot(this);" id="downbtn' . $_GET["meme"] . '">Downdoot</button>' .
                          '<p class="meme-title">' . $titulo . '</p>' .
                          '<span class="w3-small meme-time">Postado as ' . date_format(date_create($datahora), "H:i d/m/Y") . ' por ' . $loginUsuario . '</span>' .
                          '<div class="meme-image"><img src="memes/' . $arquivo . '"></div>' .
