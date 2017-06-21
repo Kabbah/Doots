@@ -14,6 +14,96 @@ if(!isset($_SESSION["login"])) {
         <link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+        <script>
+            function openPreview(btn) {
+                document.getElementById("preview" + btn.value).style.display = "block";
+                btn.setAttribute("onclick", "closePreview(this)");
+            }
+            function closePreview(btn) {
+                document.getElementById("preview" + btn.value).style.display = "none";
+                btn.setAttribute("onclick", "openPreview(this)");
+            }
+        </script>
+        <script>
+            function updoot(btn) {
+                var memeID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "updoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um updoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:purple;");
+                btn.setAttribute("onclick", "un_updoot(this);");
+                
+                // Altera o texto da pontuação.
+                if(document.getElementById("downbtn" + btn.value).getAttribute("onclick") == "un_downdoot(this);") {
+                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 2;
+                    
+                    // Também tem que resetar o outro botão.
+                    document.getElementById("downbtn" + btn.value).setAttribute("style", "color:black;");
+                    document.getElementById("downbtn" + btn.value).setAttribute("onclick", "downdoot(this);");
+                }
+                else {
+                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 1;
+                }
+            }
+            function downdoot(btn) {
+                var memeID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "downdoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um downdoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:purple;");
+                btn.setAttribute("onclick", "un_downdoot(this);");
+                
+                // Altera o texto da pontuação.
+                if(document.getElementById("upbtn" + btn.value).getAttribute("onclick") == "un_updoot(this);") {
+                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 2;
+                    
+                    // Também tem que resetar o outro botão.
+                    document.getElementById("upbtn" + btn.value).setAttribute("style", "color:black;");
+                    document.getElementById("upbtn" + btn.value).setAttribute("onclick", "updoot(this);");
+                }
+                else {
+                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 1;
+                }
+            }
+            function un_updoot(btn) {
+                var memeID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "un_updoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um un_updoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:black;");
+                btn.setAttribute("onclick", "updoot(this);");
+                
+                // Altera o texto da pontuação.
+                document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 1;
+            }
+            function un_downdoot(btn) {
+                var memeID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "un_downdoot.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("memeID=" + memeID);
+                
+                // Depois de fazer um un_downdoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:black;");
+                btn.setAttribute("onclick", "downdoot(this);");
+                
+                // Altera o texto da pontuação.
+                document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 1;
+            }
+        </script>
     </head>
     
     <body>
@@ -37,17 +127,53 @@ if(!isset($_SESSION["login"])) {
             <?php
             require ("dbConn.php");
             
-            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, count(Comentario.id) FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN Comentario ON Meme.id = Comentario.idMeme GROUP BY Meme.id ORDER BY Meme.doots DESC");
+            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, count(Comentario.id), MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme GROUP BY Meme.id ORDER BY Meme.doots DESC");
+            $stmt->bind_param("s", $_SESSION["id"]);
             $stmt->execute();
             
-            $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $countComentarios);
-            while($stmt->fetch()) { // Isso vai pegar todos os memes e mostrar na front page. Caso a gente queira limitar para um número máximo, é aqui que vai mudar.
-                // Esses echo que eu to fazendo vão ser horrivelmente feios, não tô com muita paciência pra CSS agora.
-                echo "<p>" .
-                        "<a href='showMeme.php?meme=$memeId'><img src='memes/$arquivo' style='max-width:150px;max-height:150px'></a>" .
-                        "<span>$titulo</span>" .
-                    "</p>";
+            echo "<ul class='w3-ul'>";
+            
+            $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $countComentarios, $updoot);
+            while($stmt->fetch()) {
+                $colorup = "black";
+                $colordown = "black";
+                $unup = "";
+                $undown = "";
+                
+                if($updoot == "1") {
+                    $colorup = "purple";
+                    $colordown = "black";
+                    $unup = "un_";
+                    $undown = "";
+                }
+                else if($updoot == "0") {
+                    $colorup = "black";
+                    $colordown = "purple";
+                    $unup = "";
+                    $undown = "un_";
+                }
+                
+                echo "<li class='w3-padding-16'>" .
+                        "<div class='w3-left' style='margin-right:10px;'>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='upbtn$memeId' style='color:$colorup;' onclick='{$unup}updoot(this);'><i class='fa fa-arrow-up'></i></button></p>" .
+                            "<p id='doots$memeId' style='text-align:center;margin:0px;'>$doots</p>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='downbtn$memeId' style='color:$colordown;' onclick='{$undown}downdoot(this);'><i class='fa fa-arrow-down'></i></button></p>" .
+                        "</div>" .
+                        "<div class='w3-left' style='margin-right:10px;'>" .
+                            "<div>" .
+                                "<a style='text-align:center;' href='showMeme.php?meme=$memeId'><img src='memes/$arquivo' style='width:80px;height:80px'></a>" .
+                            "</div>" .
+                        "</div>" .
+                        "<div style='overflow:hidden;'>" .
+                            "<h2 style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$titulo</a></h2>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Enviado em $datahora por $login</p>" .
+                            "<p style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$countComentarios comentários</a></p>" .
+                            "<div id='preview$memeId' class='w3-panel w3-white w3-round-xlarge w3-border' style='display:none;'><img src='memes/$arquivo'></div>" .
+                        "</div>" .
+                    "</li>";
             }
+            
+            echo "</ul>";
             
             $stmt->close();
             $conn->close();
