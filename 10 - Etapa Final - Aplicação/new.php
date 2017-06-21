@@ -14,6 +14,16 @@ if(!isset($_SESSION["login"])) {
         <link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+        <script>
+            function openPreview(btn) {
+                document.getElementById("preview" + btn.value).style.display = "block";
+                btn.setAttribute("onclick", "closePreview(this)");
+            }
+            function closePreview(btn) {
+                document.getElementById("preview" + btn.value).style.display = "none";
+                btn.setAttribute("onclick", "openPreview(this)");
+            }
+        </script>
     </head>
     
     <body>
@@ -40,14 +50,36 @@ if(!isset($_SESSION["login"])) {
             $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, count(Comentario.id) FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN Comentario ON Meme.id = Comentario.idMeme GROUP BY Meme.id ORDER BY Meme.dataHora DESC");
             $stmt->execute();
             
+            echo "<ul class='w3-ul'>";
+            
             $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $countComentarios);
             while($stmt->fetch()) { // Isso vai pegar todos os memes e mostrar na front page. Caso a gente queira limitar para um número máximo, é aqui que vai mudar.
                 // Esses echo que eu to fazendo vão ser horrivelmente feios, não tô com muita paciência pra CSS agora.
-                echo "<p>" .
-                        "<a href='showMeme.php?meme=$memeId'><img src='memes/$arquivo' style='max-width:150px;max-height:150px'></a>" .
-                        "<span>$titulo</span>" .
-                    "</p>";
+                //echo "<p>" .
+                //        "<a href='showMeme.php?meme=$memeId'><img src='memes/$arquivo' style='max-width:150px;max-height:150px'></a>" .
+                //        "<span>$titulo</span>" .
+                //    "</p>";
+                echo "<li class='w3-padding-16'>" .
+                        "<div class='w3-left' style='margin-right:10px;'>" .
+                            "<p style='margin:0px;'><button class='w3-button'><i class='fa fa-arrow-up'></i></button></p>" .
+                            "<p style='text-align:center;margin:0px;'>$doots</p>" .
+                            "<p style='margin:0px;'><button class='w3-button'><i class='fa fa-arrow-down'></i></button></p>" .
+                        "</div>" .
+                        "<div class='w3-left' style='margin-right:10px;'>" .
+                            "<div>" .
+                                "<a style='text-align:center;' href='showMeme.php?meme=$memeId'><img src='memes/$arquivo' style='width:80px;height:80px'></a>" .
+                            "</div>" .
+                        "</div>" .
+                        "<div style='overflow:hidden;'>" .
+                            "<h2 style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$titulo</a></h2>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Enviado em $datahora por $login</p>" .
+                            "<p style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$countComentarios comentários</a></p>" .
+                            "<div id='preview$memeId' class='w3-panel w3-white w3-round-xlarge w3-border' style='display:none;'><img src='memes/$arquivo'></div>" .
+                        "</div>" .
+                    "</li>";
             }
+            
+            echo "</ul>";
             
             $stmt->close();
             $conn->close();
