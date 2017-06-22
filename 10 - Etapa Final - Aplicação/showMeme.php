@@ -152,7 +152,15 @@ else if($updoot == "0") {
                         "</div>" .
                         "<div class='meme-image'><img src='memes/$arquivo'></div>";
                     
-                    echo "<div></div>"; // Reservado pra input de comentário
+                    echo "<div style='margin:12px;'><h3>Comentários</h3></div>";
+                    
+                    echo "<div style='margin:12px;'>" .
+                            "<form method='post' action='processComment.php'>" .
+                                "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
+                                "<input type='hidden' name='meme' value='{$_GET["meme"]}'>" .
+                                "<input type='submit'>" .
+                            "</form>" .
+                        "</div>";
                     
                     if($countComentarios > 0) {
                         $stmt = $conn->prepare("SELECT Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id WHERE Comentario.idMeme = ?");
@@ -179,7 +187,6 @@ else if($updoot == "0") {
                     }
                     else {
                         echo '<h4 class="comment-wrapper">Ainda não há comentários. Escreva um você! <b>AGORA!</b></h4>';
-                        echo '<p id="debug"></p>';
                     }
                 }
                 else {
