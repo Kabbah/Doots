@@ -173,7 +173,7 @@ else if($updoot == "0") {
                         while($stmt->fetch()) {
                             echo "<li class='comment-wrapper' style='min-height:114px;'>" .
                                     "<div class='comment-author w3-left' style='margin-right:10px;'>" .
-                                        "<img class='avatar' src='avatares/$avatarUsuarioComentario'>" .
+                                        "<img class='avatar w3-round' src='avatares/$avatarUsuarioComentario'>" .
                                         "<p style='margin:0px;'>$loginUsuarioComentario</p>" .
                                         "<p class='w3-tiny' style='margin:0px;'>" . date_format(date_create($datahoraComentario), "H:i d/m/Y") . "</p>" .
                                     "</div>" .
