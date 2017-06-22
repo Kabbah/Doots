@@ -1,4 +1,4 @@
-CREATE TABLE Usuario (
+CREATE TABLE IF NOT EXISTS Usuario (
 	id INT AUTO_INCREMENT,
 	login VARCHAR(255) NOT NULL UNIQUE,
 	senha VARCHAR(255) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE Usuario (
 
 /* Usuario(*ID*, login, senha, email, avatar, doots, dataJoin, deletado) */
 
-CREATE TABLE Meme (
+CREATE TABLE IF NOT EXISTS Meme (
 	id INT AUTO_INCREMENT,
 	dataHora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	arquivo VARCHAR(255) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE Meme (
 /* Meme(*ID*, dataHora, arquivo, titulo, doots, deletado, poster)
     poster -> Usuario(ID) */
 	
-CREATE TABLE MemeDoot (
+CREATE TABLE IF NOT EXISTS MemeDoot (
 	idMeme INT,
 	idUsuario INT,
 	updoot BOOLEAN NOT NULL,
@@ -45,10 +45,10 @@ CREATE TABLE MemeDoot (
 	
 	
 	
-CREATE TABLE Comentario (
+CREATE TABLE IF NOT EXISTS Comentario (
 	id INT AUTO_INCREMENT,
-	conteudo VARCHAR(255) NOT NULL,
-	conteudoOri VARCHAR(255) NOT NULL,
+	conteudo TEXT NOT NULL,
+	conteudoOri TEXT NOT NULL,
 	doots VARCHAR(255) NOT NULL DEFAULT 0,
 	dataHora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	editado BOOLEAN NOT NULL DEFAULT FALSE,
@@ -68,7 +68,7 @@ CREATE TABLE Comentario (
 	
 	
 	
-CREATE TABLE ComentarioDoot (
+CREATE TABLE IF NOT EXISTS ComentarioDoot (
 	idComentario INT,
 	idUsuario INT,
 	updoot BOOLEAN NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE ComentarioDoot (
 	
 	
 	
-CREATE TABLE Reacao (
+CREATE TABLE IF NOT EXISTS Reacao (
 	id INT AUTO_INCREMENT,
 	label VARCHAR(255) NOT NULL UNIQUE,
 	imagem VARCHAR(255) NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE Reacao (
 
 
 
-CREATE TABLE MemeReacao (
+CREATE TABLE IF NOT EXISTS MemeReacao (
 	idMeme INT,
 	idUsuario INT,
 	idReacao INT,
@@ -114,7 +114,7 @@ CREATE TABLE MemeReacao (
 	
 	
 
-CREATE TABLE ComentarioReacao (
+CREATE TABLE IF NOT EXISTS ComentarioReacao (
 	idComentario INT,
 	idUsuario INT,
 	idReacao INT,
