@@ -165,7 +165,7 @@ if(!isset($_SESSION["login"])) {
                         "</div>" .
                         "<div style='overflow:hidden;'>" .
                             "<h2 style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$titulo</a></h2>" .
-                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Enviado em $datahora por $login</p>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $login</p>" .
                             "<p style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$countComentarios comentários</a></p>" .
                             "<div id='preview$memeId' class='w3-panel w3-white w3-round-xlarge w3-border' style='display:none;'><img src='memes/$arquivo'></div>" .
                         "</div>" .

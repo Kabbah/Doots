@@ -32,28 +32,29 @@ $caminho = $pasta . $arquivo;
 
 $deuboa = true;
 
-// TODO: colocar cookies nas coisas.
-// TODO: fazer redirects.
-
 // Imagem falsa
 $tamanho = getimagesize($_FILES["imagem"]["tmp_name"]);
 if($tamanho === false) {
     $deuboa = false;
+    setcookie("erroUpload", "Não foi possível computar o tamanho da imagem.", time() + 10);
 }
 
 // Conflito de nomes
 if(file_exists($caminho)) {
     $deuboa = false;
+    setcookie("erroUpload", "Ocorreu um erro no upload de seu meme. Tente novamente mais tarde.", time() + 10);
 }
 
 // Imagem muito grande
 if($_FILES["imagem"]["size"] > 10000000) {
     $deuboa = false;
+    setcookie("erroUpload", "A imagem é muito grande. Favor enviar um arquivo de até 9,5 MB.", time() + 10);
 }
 
 // Imagem em formato inadequado
 if($tipo != "jpg" && $tipo != "jpeg" && $tipo != "png" && $tipo != "gif" && $tipo != "svg") {
     $deuboa = false;
+    setcookie("erroUpload", "O formato é inválido. Favor enviar apenas arquivos do tipo JPG, JPEG, PNG, GIF ou SVG.", time() + 10);
 }
 
 if($deuboa) {
@@ -65,7 +66,14 @@ if($deuboa) {
         $stmt->bind_param("sss", $arquivo, $_POST["titulo"], $_SESSION["id"]);
         $stmt->execute();
         
-        // header("Location: )
+        $stmt = $conn->prepare("SELECT id FROM Meme WHERE arquivo = ?");
+        $stmt->bind_param("s", $arquivo);
+        $stmt->execute();
+        $stmt->bind_result($idMeme);
+        $stmt->fetch();
+        
+        header("Location: showMeme.php?meme=$idMeme");
+        exit;
     }
     else {
         // Upload não deu boa
@@ -75,7 +83,6 @@ if($deuboa) {
     }
 }
 else {
-    setcookie("erroUpload", "Ocorreu um erro no upload de seu meme. Tente novamente mais tarde.", time() + 10);
     header("location:creatememe.php");
     exit();
 }
