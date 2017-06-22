@@ -150,25 +150,31 @@ else if($updoot == "0") {
                                 "<p style='margin:0px;'> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $loginUsuario</p>" .
                             "</div>" .
                         "</div>" .
-                        "<div class='meme-image'><img src='memes/$arquivo'></div>" .
-                        "<div></div>"; // Reservado pra input de comentário
+                        "<div class='meme-image'><img src='memes/$arquivo'></div>";
+                    
+                    echo "<div></div>"; // Reservado pra input de comentário
                     
                     if($countComentarios > 0) {
                         $stmt = $conn->prepare("SELECT Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id WHERE Comentario.idMeme = ?");
                         $stmt->bind_param("s", $_GET["meme"]);
                         $stmt->execute();
                         
+                        echo "<ul class='w3-ul' style='margin-top:10px;'>";
+                        
                         $stmt->bind_result($textoComentario, $dootsComentario, $datahoraComentario, $editadoComentario, $deletadoComentario, $datahoraeditComentario, $loginUsuarioComentario, $avatarUsuarioComentario);
                         while($stmt->fetch()) {
-                            echo '<div class="comment-wrapper">
-                                    <div class="comment-author w3-left">
-                                        <img class="avatar" src="avatares/' . $avatarUsuarioComentario . '">
-                                        <p>' . $loginUsuarioComentario . '</p>
-                                        <p class="w3-tiny">' . date_format(date_create($datahoraComentario), "H:i d/m/Y") . '
-                                    </div>
-                                    <p>' . $textoComentario . '</p>
-                                 </div>';
+                            echo "<li class='comment-wrapper' style='min-height:114px;'>" .
+                                    "<div class='comment-author w3-left' style='margin-right:10px;'>" .
+                                        "<img class='avatar' src='avatares/$avatarUsuarioComentario'>" .
+                                        "<p style='margin:0px;'>$loginUsuarioComentario</p>" .
+                                        "<p class='w3-tiny' style='margin:0px;'>" . date_format(date_create($datahoraComentario), "H:i d/m/Y") . "</p>" .
+                                    "</div>" .
+                                    "<p style='overflow:hidden;'>$textoComentario</p>" .
+                                "</li>";
                         }
+                        
+                        echo "</ul>";
+                        
                         $stmt->close();
                     }
                     else {
