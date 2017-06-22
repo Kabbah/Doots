@@ -20,14 +20,14 @@ $unup = "";
 $undown = "";
 
 if($updoot == "1") {
-    $colorup = "purple";
+    $colorup = "#e600e6";
     $colordown = "black";
     $unup = "un_";
     $undown = "";
 }
 else if($updoot == "0") {
     $colorup = "black";
-    $colordown = "purple";
+    $colordown = "#e600e6";
     $unup = "";
     $undown = "un_";
 }
@@ -59,7 +59,7 @@ else if($updoot == "0") {
                 xmlhttp.send("memeID=" + memeID);
                 
                 // Depois de fazer um updoot, tem que mudar o botão.
-                btn.setAttribute("style", "color:purple;");
+                btn.setAttribute("style", "color:#e600e6;");
                 btn.setAttribute("onclick", "un_updoot(this);");
                 
                 // Altera o texto da pontuação.
@@ -83,7 +83,7 @@ else if($updoot == "0") {
                 xmlhttp.send("memeID=" + memeID);
                 
                 // Depois de fazer um updoot, tem que mudar o botão.
-                btn.setAttribute("style", "color:purple;");
+                btn.setAttribute("style", "color:#e600e6;");
                 btn.setAttribute("onclick", "un_downdoot(this);");
                 
                 // Altera o texto da pontuação.
