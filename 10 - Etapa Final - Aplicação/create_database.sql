@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS Usuario (
 	PRIMARY KEY (id)
 );
 
+INSERT IGNORE INTO Usuario (id, login, senha, email, dataJoin) VALUES ('2', 'Kabbah', '$2y$10$j8IAWfMV5Im9LUXuSfXgte3Q2wWjVlTOlj5dgla19e6Vo0P7E30G6', 'victorbg@hotmail.com', '2017-06-20 15:02:43');
+
 /* Usuario(*ID*, login, senha, email, avatar, doots, dataJoin, deletado) */
 
 CREATE TABLE IF NOT EXISTS Meme (
@@ -25,6 +27,8 @@ CREATE TABLE IF NOT EXISTS Meme (
 	PRIMARY KEY (id),
 	FOREIGN KEY (poster) REFERENCES Usuario(id)
 );
+
+INSERT IGNORE INTO Meme (dataHora, arquivo, titulo, poster) VALUES ('2017-06-22 19:01:08', '07c87495dd2fd4c27463507d666b7195.jpg', 'Banco de Dados', '2');
 
 /* Meme(*ID*, dataHora, arquivo, titulo, doots, deletado, poster)
     poster -> Usuario(ID) */
