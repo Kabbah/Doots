@@ -32,6 +32,9 @@ require ("dbConn.php");
             if (isset($_COOKIE["alteracaoSucesso"])){
                 echo '<div class="error"><p class="w3-panel w3-green"><b>' . $_COOKIE['alteracaoSucesso'] . '</b></p>';
             }
+            if (isset($_COOKIE["erroPassword"])){
+                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroPassword'] . '</b></p>';
+            }
         ?>
         <form method="post" action="processAvatar.php">
             <label>Avatar</label>
@@ -50,6 +53,8 @@ require ("dbConn.php");
             <input type="password" name="password">
             <label>Confirmar Senha</label>
             <input type="password" name="password-confirm">
+            <label>Senha Atual</label>
+            <input type="password" name="password-now">
             <input type="submit">
         </form>
     </body>
