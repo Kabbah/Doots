@@ -22,18 +22,18 @@ require ("dbConn.php");
         <?php
             require('banner.php');
         ?>
-        <form>
+        <form method="post" action="processAvatar.php">
             <label>Avatar</label>
             <input type="file" name ="avatar">
             <input type='submit'>
         </form>
-        <form>
-            <label>Email</label>
+        <form method="post" action="processEmail.php">
+            <label >Email</label>
             <input type="text" name="email">
             <label>Confirmar Email</label>
             <input type="text" name="email-confirm">
         </form>
-        <form>
+        <form method="post" action="processPassword.php">
             <label>Senha</label>
             <input type="password" name="password">
             <label>Confirmar Senha</label>
