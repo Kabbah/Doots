@@ -81,6 +81,10 @@
     margin: 0;
 }
 
+.text-btn:hover {
+    background-color: inherit;
+}
+
 .text-btn i:hover {
     text-decoration: underline;
     cursor: pointer;

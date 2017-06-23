@@ -214,6 +214,20 @@ else if($updoot == "0") {
                 document.getElementById("dootscomment" + btn.value).innerHTML = parseInt(document.getElementById("dootscomment" + btn.value).innerHTML) + 1;
             }
         </script>
+        <script>
+            function delete_comment(btn) {
+                var commentID = btn.value;
+                
+                if(confirm("Deseja realmente excluir este comentário?")) {
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open("POST", "delete_comment.php", true);
+                    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xmlhttp.send("commentID=" + commentID);
+                    
+                    document.getElementById("comentario" + btn.value).innerHTML = "<div class='comment-author w3-left' style='margin-right:10px;'><img class='avatar w3-round' src='avatares/avatar.png'><p>[Excluído]</p><p class='w3-tiny'> 00:00 00/00/0000 </p></div><div style='overflow:hidden;'>[Excluído]</div>";
+                }
+            }
+        </script>
     </head>
     
     <body>
@@ -248,7 +262,7 @@ else if($updoot == "0") {
                         "</div>";
                     
                     if($countComentarios > 0) {
-                        $stmt = $conn->prepare("SELECT Comentario.id, Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar, ComentarioDoot.updoot FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id LEFT JOIN ComentarioDoot ON (Comentario.id = ComentarioDoot.idComentario AND ComentarioDoot.idUsuario = ?) WHERE Comentario.idMeme = ? ORDER BY Comentario.doots DESC");
+                        $stmt = $conn->prepare("SELECT Comentario.id, Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar, ComentarioDoot.updoot FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id LEFT JOIN ComentarioDoot ON (Comentario.id = ComentarioDoot.idComentario AND ComentarioDoot.idUsuario = ?) WHERE Comentario.idMeme = ? ORDER BY Comentario.doots DESC, Comentario.dataHora DESC");
                         $stmt->bind_param("ss", $_SESSION["id"], $_GET["meme"]);
                         $stmt->execute();
                         
@@ -276,7 +290,7 @@ else if($updoot == "0") {
                             
                             if(!$deletadoComentario) {
                                 $textoComentarioMarkdown = Markdown::defaultTransform($textoComentario);
-                                echo "<li class='comment-wrapper' style='min-height:114px;'>" .
+                                echo "<li class='comment-wrapper' style='min-height:114px;' id='comentario$idComentario'>" .
                                         "<div class='w3-left' style='margin-right:10px;'>" .
                                             "<p style='margin:0px;'><button class='w3-button' value='$idComentario' id='upcommentbtn$idComentario' style='color:{$colorupcomentario};' onclick='{$unupcomentario}updoot_comment(this);'><i class='fa fa-arrow-up'></i></button></p>" .
                                             "<p id='dootscomment$idComentario' style='text-align:center;margin:0px;'>$dootsComentario</p>" .
@@ -291,8 +305,8 @@ else if($updoot == "0") {
                                             "<p class='w3-tiny'>" . date_format(date_create($datahoraeditComentario), "H:i d/m/Y") . "</p>";
                                 }
                                 if($loginUsuarioComentario == $_SESSION['login']) {
-                                    echo    "<p class='w3-small text-btn' value='$idComentario' onclick='edit_comment(this)'><i class='fa fa-pencil' aria-hidden='true'> Editar</i></p>" .
-                                            "<p class='w3-small text-btn' value='$idComentario' onclick='delete_comment(this)'><i class='fa fa-trash-o' aria-hidden='true'> Excluir</i></p>";
+                                    echo    "<p><button class='w3-small w3-button text-btn' style='padding:0px;' value='$idComentario' onclick='edit_comment(this);'><i class='fa fa-pencil' aria-hidden='true'> Editar</i></button></p>" .
+                                            "<p><button class='w3-small w3-button text-btn' style='padding:0px;' value='$idComentario' onclick='delete_comment(this);'><i class='fa fa-trash-o' aria-hidden='true'> Excluir</i></button></p>";
                                 }
                                 echo        "</div>" .
                                         "<div style='overflow:hidden;'>$textoComentarioMarkdown</div>" .
