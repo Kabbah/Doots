@@ -20,24 +20,37 @@ require ("dbConn.php");
     </head>
     <body>
         <?php
-            require('banner.php');
+            require('banner.php'); 
+        ?>
+        <?php
+            if (isset($_COOKIE["erroEmail"])){
+                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroEmail'] . '</b></p>';
+            }
+            if (isset($_COOKIE["alteracaoErro"])){
+                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['alteracaoErro'] . '</b></p>';
+            }
+            if (isset($_COOKIE["alteracaoSucesso"])){
+                echo '<div class="error"><p class="w3-panel w3-green"><b>' . $_COOKIE['alteracaoSucesso'] . '</b></p>';
+            }
         ?>
         <form method="post" action="processAvatar.php">
             <label>Avatar</label>
             <input type="file" name ="avatar">
-            <input type='submit'>
+            <input type="submit">
         </form>
         <form method="post" action="processEmail.php">
-            <label >Email</label>
+            <label>Email</label>
             <input type="text" name="email">
             <label>Confirmar Email</label>
             <input type="text" name="email-confirm">
+            <input type="submit">
         </form>
         <form method="post" action="processPassword.php">
             <label>Senha</label>
             <input type="password" name="password">
             <label>Confirmar Senha</label>
             <input type="password" name="password-confirm">
+            <input type="submit">
         </form>
     </body>
 </html>
