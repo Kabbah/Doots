@@ -5,6 +5,11 @@ if(!isset($_GET["meme"])) {
 }
 
 require ("dbConn.php");
+spl_autoload_register(function($class){
+	require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, ltrim($class, '\\')).'.php';
+});
+use \Michelf\Markdown;
+use \Michelf\MarkdownExtra;
                 
 $stmt = $conn->prepare("SELECT Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Meme.deletado, Usuario.login, count(Comentario.id), MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.id = ? LIMIT 1");
 $stmt->bind_param("ss", $_SESSION["id"], $_GET["meme"]);
@@ -172,6 +177,7 @@ else if($updoot == "0") {
                         $stmt->bind_result($textoComentario, $dootsComentario, $datahoraComentario, $editadoComentario, $deletadoComentario, $datahoraeditComentario, $loginUsuarioComentario, $avatarUsuarioComentario);
                         while($stmt->fetch()) {
                             if(!$deletadoComentario) {
+                                $textoComentarioMarkdown = Markdown::defaultTransform($textoComentario);
                                 echo "<li class='comment-wrapper' style='min-height:114px;'>" .
                                         "<div class='comment-author w3-left' style='margin-right:10px;'>" .
                                             "<img class='avatar w3-round' src='avatares/$avatarUsuarioComentario'>" .
@@ -186,7 +192,7 @@ else if($updoot == "0") {
                                             "<p class='w3-small text-btn'><i class='fa fa-trash-o' aria-hidden='true'> Excluir</i></p>";
                                 }
                                 echo        "</div>" .
-                                        "<p style='overflow:hidden;'>$textoComentario</p>" .
+                                        "<div style='overflow:hidden;'>$textoComentarioMarkdown</div>" .
                                     "</li>";
                             }
                             else {
@@ -196,7 +202,7 @@ else if($updoot == "0") {
                                             "<p>[Excluído]</p>" .
                                             "<p class='w3-tiny'> 00:00 00/00/0000 </p>" .
                                             "</div>" .
-                                        "<p style='overflow:hidden;'>[Excluído]</p>" .
+                                        "<div style='overflow:hidden;'>[Excluído]</div>" .
                                     "</li>";
                             }
                         }
