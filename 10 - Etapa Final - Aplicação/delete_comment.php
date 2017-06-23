@@ -30,6 +30,7 @@ $stmt->execute();
 $stmt->store_result();
 $stmt->bind_result($isUpdoot);
 $stmt->fetch();
+$stmt->close();
 
 $conn->commit();
 
