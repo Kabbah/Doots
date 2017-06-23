@@ -27,9 +27,7 @@ $stmt->close();
 $stmt = $conn->prepare("UPDATE Comentario SET deletado = 1 WHERE id = ?");
 $stmt->bind_param("s", $_POST["commentID"]);
 $stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($isUpdoot);
-$stmt->fetch();
+
 $stmt->close();
 
 $conn->commit();
