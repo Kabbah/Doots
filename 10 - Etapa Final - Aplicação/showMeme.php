@@ -134,6 +134,86 @@ else if($updoot == "0") {
                 document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 1;
             }
         </script>
+        <script>
+            function updoot_comment(btn) {
+                var commentID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "updoot_comment.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("commentID=" + commentID);
+                
+                // Depois de fazer um updoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:#e600e6;");
+                btn.setAttribute("onclick", "un_updoot_comment(this);");
+                
+                // Altera o texto da pontuação.
+                if(document.getElementById("downcommentbtn" + btn.value).getAttribute("onclick") == "un_downdoot_comment(this);") {
+                    document.getElementById("dootscomment" + btn.value).innerHTML = parseInt(document.getElementById("dootscomment" + btn.value).innerHTML) + 2;
+                    
+                    // Também tem que resetar o outro botão.
+                    document.getElementById("downcommentbtn" + btn.value).setAttribute("style", "color:black;");
+                    document.getElementById("downcommentbtn" + btn.value).setAttribute("onclick", "downdoot_comment(this);");
+                }
+                else {
+                    document.getElementById("dootscomment" + btn.value).innerHTML = parseInt(document.getElementById("dootscomment" + btn.value).innerHTML) + 1;
+                }
+            }
+            function downdoot_comment(btn) {
+                var commentID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "downdoot_comment.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("commentID=" + commentID);
+                
+                // Depois de fazer um updoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:#e600e6;");
+                btn.setAttribute("onclick", "un_downdoot_comment(this);");
+                
+                // Altera o texto da pontuação.
+                if(document.getElementById("upcommentbtn" + btn.value).getAttribute("onclick") == "un_updoot_comment(this);") {
+                    document.getElementById("dootscomment" + btn.value).innerHTML = parseInt(document.getElementById("dootscomment" + btn.value).innerHTML) - 2;
+                    
+                    // Também tem que resetar o outro botão.
+                    document.getElementById("upcommentbtn" + btn.value).setAttribute("style", "color:black;");
+                    document.getElementById("upcommentbtn" + btn.value).setAttribute("onclick", "updoot_comment(this);");
+                }
+                else {
+                    document.getElementById("dootscomment" + btn.value).innerHTML = parseInt(document.getElementById("dootscomment" + btn.value).innerHTML) - 1;
+                }
+            }
+            function un_updoot_comment(btn) {
+                var commentID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "un_updoot_comment.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("commentID=" + commentID);
+                
+                // Depois de fazer um un_updoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:black;");
+                btn.setAttribute("onclick", "updoot_comment(this);");
+                
+                // Altera o texto da pontuação.
+                document.getElementById("dootscomment" + btn.value).innerHTML = parseInt(document.getElementById("dootscomment" + btn.value).innerHTML) - 1;
+            }
+            function un_downdoot_comment(btn) {
+                var commentID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "un_downdoot_comment.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("commentID=" + commentID);
+                
+                // Depois de fazer um un_downdoot, tem que mudar o botão.
+                btn.setAttribute("style", "color:black;");
+                btn.setAttribute("onclick", "downdoot_comment(this);");
+                
+                // Altera o texto da pontuação.
+                document.getElementById("dootscomment" + btn.value).innerHTML = parseInt(document.getElementById("dootscomment" + btn.value).innerHTML) + 1;
+            }
+        </script>
     </head>
     
     <body>
@@ -168,17 +248,40 @@ else if($updoot == "0") {
                         "</div>";
                     
                     if($countComentarios > 0) {
-                        $stmt = $conn->prepare("SELECT Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id WHERE Comentario.idMeme = ?");
-                        $stmt->bind_param("s", $_GET["meme"]);
+                        $stmt = $conn->prepare("SELECT Comentario.id, Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar, ComentarioDoot.updoot FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id LEFT JOIN ComentarioDoot ON (Comentario.id = ComentarioDoot.idComentario AND ComentarioDoot.idUsuario = ?) WHERE Comentario.idMeme = ? ORDER BY Comentario.doots DESC");
+                        $stmt->bind_param("ss", $_SESSION["id"], $_GET["meme"]);
                         $stmt->execute();
                         
                         echo "<ul class='w3-ul' style='margin-top:10px;'>";
                         
-                        $stmt->bind_result($textoComentario, $dootsComentario, $datahoraComentario, $editadoComentario, $deletadoComentario, $datahoraeditComentario, $loginUsuarioComentario, $avatarUsuarioComentario);
+                        $stmt->bind_result($idComentario, $textoComentario, $dootsComentario, $datahoraComentario, $editadoComentario, $deletadoComentario, $datahoraeditComentario, $loginUsuarioComentario, $avatarUsuarioComentario, $updootComentario);
                         while($stmt->fetch()) {
+                            $colorupcomentario = "black";
+                            $colordowncomentario = "black";
+                            $unupcomentario = "";
+                            $undowncomentario = "";
+
+                            if($updootComentario == "1") {
+                                $colorupcomentario = "#e600e6";
+                                $colordowncomentario = "black";
+                                $unupcomentario = "un_";
+                                $undowncomentario = "";
+                            }
+                            else if($updootComentario == "0") {
+                                $colorupcomentario = "black";
+                                $colordowncomentario = "#e600e6";
+                                $unupcomentario = "";
+                                $undowncomentario = "un_";
+                            }
+                            
                             if(!$deletadoComentario) {
                                 $textoComentarioMarkdown = Markdown::defaultTransform($textoComentario);
                                 echo "<li class='comment-wrapper' style='min-height:114px;'>" .
+                                        "<div class='w3-left' style='margin-right:10px;'>" .
+                                            "<p style='margin:0px;'><button class='w3-button' value='$idComentario' id='upcommentbtn$idComentario' style='color:{$colorupcomentario};' onclick='{$unupcomentario}updoot_comment(this);'><i class='fa fa-arrow-up'></i></button></p>" .
+                                            "<p id='dootscomment$idComentario' style='text-align:center;margin:0px;'>$dootsComentario</p>" .
+                                            "<p style='margin:0px;'><button class='w3-button' value='$idComentario' id='downcommentbtn$idComentario' style='color:{$colordowncomentario};' onclick='{$undowncomentario}downdoot_comment(this);'><i class='fa fa-arrow-down'></i></button></p>" .
+                                        "</div>" .
                                         "<div class='comment-author w3-left' style='margin-right:10px;'>" .
                                             "<img class='avatar w3-round' src='avatares/$avatarUsuarioComentario'>" .
                                             "<p>$loginUsuarioComentario</p>" .
@@ -188,8 +291,8 @@ else if($updoot == "0") {
                                             "<p class='w3-tiny'>" . date_format(date_create($datahoraeditComentario), "H:i d/m/Y") . "</p>";
                                 }
                                 if($loginUsuarioComentario == $_SESSION['login']) {
-                                    echo    "<p class='w3-small text-btn'><i class='fa fa-pencil' aria-hidden='true'> Editar</i></p>" .
-                                            "<p class='w3-small text-btn'><i class='fa fa-trash-o' aria-hidden='true'> Excluir</i></p>";
+                                    echo    "<p class='w3-small text-btn' value='$idComentario' onclick='edit_comment(this)'><i class='fa fa-pencil' aria-hidden='true'> Editar</i></p>" .
+                                            "<p class='w3-small text-btn' value='$idComentario' onclick='delete_comment(this)'><i class='fa fa-trash-o' aria-hidden='true'> Excluir</i></p>";
                                 }
                                 echo        "</div>" .
                                         "<div style='overflow:hidden;'>$textoComentarioMarkdown</div>" .
