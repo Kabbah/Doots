@@ -171,14 +171,34 @@ else if($updoot == "0") {
                         
                         $stmt->bind_result($textoComentario, $dootsComentario, $datahoraComentario, $editadoComentario, $deletadoComentario, $datahoraeditComentario, $loginUsuarioComentario, $avatarUsuarioComentario);
                         while($stmt->fetch()) {
-                            echo "<li class='comment-wrapper' style='min-height:114px;'>" .
-                                    "<div class='comment-author w3-left' style='margin-right:10px;'>" .
-                                        "<img class='avatar w3-round' src='avatares/$avatarUsuarioComentario'>" .
-                                        "<p style='margin:0px;'>$loginUsuarioComentario</p>" .
-                                        "<p class='w3-tiny' style='margin:0px;'>" . date_format(date_create($datahoraComentario), "H:i d/m/Y") . "</p>" .
-                                    "</div>" .
-                                    "<p style='overflow:hidden;'>$textoComentario</p>" .
-                                "</li>";
+                            if(!$deletadoComentario) {
+                                echo "<li class='comment-wrapper' style='min-height:114px;'>" .
+                                        "<div class='comment-author w3-left' style='margin-right:10px;'>" .
+                                            "<img class='avatar w3-round' src='avatares/$avatarUsuarioComentario'>" .
+                                            "<p>$loginUsuarioComentario</p>" .
+                                            "<p class='w3-tiny'>" . date_format(date_create($datahoraComentario), "H:i d/m/Y") . "</p>";
+                                if($editadoComentario == true) {
+                                    echo    "<p class='w3-tiny'>Editado as: </p>" .
+                                            "<p class='w3-tiny'>" . date_format(date_create($datahoraeditComentario), "H:i d/m/Y") . "</p>";
+                                }
+                                if($loginUsuarioComentario == $_SESSION['login']) {
+                                    echo    "<p class='w3-small text-btn'><i class='fa fa-pencil' aria-hidden='true'> Editar</i></p>" .
+                                            "<p class='w3-small text-btn'><i class='fa fa-trash-o' aria-hidden='true'> Excluir</i></p>";
+                                }
+                                echo        "</div>" .
+                                        "<p style='overflow:hidden;'>$textoComentario</p>" .
+                                    "</li>";
+                            }
+                            else {
+                                echo "<li class='comment-wrapper' style='min-height:114px;'>" .
+                                        "<div class='comment-author w3-left' style='margin-right:10px;'>" .
+                                            "<img class='avatar w3-round' src='avatares/avatar.png'>" .
+                                            "<p>[Excluído]</p>" .
+                                            "<p class='w3-tiny'> 00:00 00/00/0000 </p>" .
+                                            "</div>" .
+                                        "<p style='overflow:hidden;'>[Excluído]</p>" .
+                                    "</li>";
+                            }
                         }
                         
                         echo "</ul>";

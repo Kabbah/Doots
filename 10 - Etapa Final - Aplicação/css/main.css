@@ -43,6 +43,7 @@
     margin: 0 12px;
     max-width: inherit;
     max-height: 600px;
+    padding: 6px;
 }
 .meme-image img {
     object-fit: cover;
@@ -55,6 +56,7 @@
     margin-left: 12px;
     margin-right: 12px;
     color: black;
+    padding: 6px;
     display: block;
     min-height: 96px;
     word-wrap:break-word;
@@ -72,7 +74,17 @@
 
 .comment-author {
     width: 110px;
-    
+    text-align: center;
+}
+
+.comment-author p {
+    margin: 0;
+}
+
+.text-btn i:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    width: 100%;
 }
 
 .welcome {
@@ -102,6 +114,8 @@
     padding: 6px;
     text-align: center;
 }
+
+
 
 #cog {
     height: 32px;
