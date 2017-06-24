@@ -2,7 +2,7 @@
     min-width: 685px;
 }
 
-.create-wrapper, .login-wrapper {
+.create-wrapper, .login-wrapper, .settings-wrapper {
     max-width: 80%;
     min-width: 385px;
     position: absolute;

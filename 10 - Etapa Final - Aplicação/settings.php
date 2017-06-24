@@ -22,46 +22,69 @@ require ("dbConn.php");
         <?php
             require('banner.php'); 
         ?>
-        <?php
-            if (isset($_COOKIE["erroEmail"])){
-                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroEmail'] . '</b></p>';
-            }
-            if (isset($_COOKIE["alteracaoErro"])){
-                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['alteracaoErro'] . '</b></p>';
-            }
-            if (isset($_COOKIE["alteracaoSucesso"])){
-                echo '<div class="error"><p class="w3-panel w3-green"><b>' . $_COOKIE['alteracaoSucesso'] . '</b></p>';
-            }
-            if (isset($_COOKIE["erroPassword"])){
-                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroPassword'] . '</b></p>';
-            }
-            if (isset($_COOKIE["erroUpload"])){
-                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroUpload'] . '</b></p>';
-            }
-            if (isset($_COOKIE["avatarVazio"])){
-                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['avatarVazio'] . '</b></p>';
-            }
-        ?>
-        <form method="post" enctype="multipart/form-data" action="processAvatar.php">
-            <label>Avatar</label>
-            <input type="file" name="avatar" required>
-            <input type="submit">
-        </form>
-        <form method="post" action="processEmail.php">
-            <label>Email</label>
-            <input type="text" name="email" required>
-            <label>Confirmar Email</label>
-            <input type="text" name="email-confirm" required>
-            <input type="submit">
-        </form>
-        <form method="post" action="processPassword.php">
-            <label>Senha</label>
-            <input type="password" name="password" required>
-            <label>Confirmar Senha</label>
-            <input type="password" name="password-confirm" required>
-            <label>Senha Atual</label>
-            <input type="password" name="password-now" required>
-            <input type="submit">
-        </form>
+        <div class="settings-wrapper">
+            <?php
+                if (isset($_COOKIE["erroEmail"])){
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroEmail'] . '</b></p>';
+                }
+                if (isset($_COOKIE["alteracaoErro"])){
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['alteracaoErro'] . '</b></p>';
+                }
+                if (isset($_COOKIE["alteracaoSucesso"])){
+                    echo '<div class="error"><p class="w3-panel w3-green"><b>' . $_COOKIE['alteracaoSucesso'] . '</b></p>';
+                }
+                if (isset($_COOKIE["erroPassword"])){
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroPassword'] . '</b></p>';
+                }
+                if (isset($_COOKIE["erroUpload"])){
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroUpload'] . '</b></p>';
+                }
+                if (isset($_COOKIE["avatarVazio"])){
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['avatarVazio'] . '</b></p>';
+                }
+            ?>
+        
+            <h3 class="w3-purple form-title">Mudar Avatar</h3>
+            <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-border-top w3-animate-opacity log-reg" method="post" enctype="multipart/form-data" action="processAvatar.php">
+                <br/>
+                <label class="w3-text-purple">Avatar</label>
+                <input class="w3-input w3-border" type="file" name="avatar" required>
+
+                <br/>
+                <input class="w3-button w3-purple form-submit-button" type="submit">
+            </form>
+
+            <h3 class="w3-purple form-title">Mudar Email</h3>
+            <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" method="post" action="processEmail.php">
+                <br/>
+                <label class="w3-text-purple">Email</label>
+                <input class="w3-input w3-border" type="text" name="email" required>
+
+                <br/>
+                <label class="w3-text-purple">Confirmar Email</label>
+                <input class="w3-input w3-border" type="text" name="email-confirm" required>
+
+                <br/>
+                <input class="w3-button w3-purple form-submit-button" type="submit">
+            </form>
+            
+            <h3 class="w3-purple form-title">Mudar Senha</h3>
+            <form class="w3-container w3-border-bottom w3-border-left w3-border-right w3-animate-opacity log-reg" method="post" action="processPassword.php">
+                <br/>
+                <label class="w3-text-purple">Senha Atual</label>
+                <input class="w3-input w3-border" type="password" name="password-now" required>
+
+                <br/>
+                <label class="w3-text-purple">Nova Senha</label>
+                <input class="w3-input w3-border" type="password" name="password" required>
+
+                <br/>
+                <label class="w3-text-purple">Confirmar Senha</label>
+                <input class="w3-input w3-border" type="password" name="password-confirm" required>
+
+                <br/>
+                <input class="w3-button w3-purple form-submit-button" type="submit">
+            </form>
+        </div>
     </body>
 </html>
