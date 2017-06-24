@@ -12,7 +12,7 @@ if($_POST["login"] == "" || $_POST["password"] == "") {
 }
 
 // Prepara o query SQL
-$stmt = $conn->prepare("SELECT id, senha, avatar FROM Usuario WHERE login=?");
+$stmt = $conn->prepare("SELECT id, senha, avatar FROM Usuario WHERE BINARY login=?");
 $stmt->bind_param("s", $_POST['login']);
 $stmt->execute();
 $stmt->store_result();
