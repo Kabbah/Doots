@@ -35,26 +35,32 @@ require ("dbConn.php");
             if (isset($_COOKIE["erroPassword"])){
                 echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroPassword'] . '</b></p>';
             }
+            if (isset($_COOKIE["erroUpload"])){
+                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroUpload'] . '</b></p>';
+            }
+            if (isset($_COOKIE["avatarVazio"])){
+                echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['avatarVazio'] . '</b></p>';
+            }
         ?>
-        <form method="post" action="processAvatar.php">
+        <form method="post" enctype="multipart/form-data" action="processAvatar.php">
             <label>Avatar</label>
-            <input type="file" name ="avatar">
+            <input type="file" name="avatar" required>
             <input type="submit">
         </form>
         <form method="post" action="processEmail.php">
             <label>Email</label>
-            <input type="text" name="email">
+            <input type="text" name="email" required>
             <label>Confirmar Email</label>
-            <input type="text" name="email-confirm">
+            <input type="text" name="email-confirm" required>
             <input type="submit">
         </form>
         <form method="post" action="processPassword.php">
             <label>Senha</label>
-            <input type="password" name="password">
+            <input type="password" name="password" required>
             <label>Confirmar Senha</label>
-            <input type="password" name="password-confirm">
+            <input type="password" name="password-confirm" required>
             <label>Senha Atual</label>
-            <input type="password" name="password-now">
+            <input type="password" name="password-now" required>
             <input type="submit">
         </form>
     </body>
