@@ -170,7 +170,7 @@ $stmt->close();
             }
             
             if($usuarioID != NULL) {
-                $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, count(Comentario.id), ((sign(Meme.doots) * log(10, greatest(abs(Meme.doots),1))) + (unix_timestamp(Meme.dataHora) - 1134028003)/45000) AS popularity, MemeDoot.updoot FROM Meme INNER JOIN Usuario ON (Meme.poster = Usuario.id AND Meme.poster = ?) LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' GROUP BY Meme.id ORDER BY popularity DESC LIMIT 10 OFFSET ?");
+                $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, Usuario.doots, count(Comentario.id), ((sign(Meme.doots) * log(10, greatest(abs(Meme.doots),1))) + (unix_timestamp(Meme.dataHora) - 1134028003)/45000) AS popularity, MemeDoot.updoot FROM Meme INNER JOIN Usuario ON (Meme.poster = Usuario.id AND Meme.poster = ?) LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' GROUP BY Meme.id ORDER BY popularity DESC LIMIT 10 OFFSET ?");
                 $stmt->bind_param("ssi", $usuarioID, $_SESSION["id"], $offset);
                 $stmt->execute();
 
@@ -178,7 +178,7 @@ $stmt->close();
 
                 echo "<ul class='w3-ul'>";
 
-                $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $countComentarios, $popularidade, $updoot);
+                $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $userdoots, $countComentarios, $popularidade, $updoot);
                 while($stmt->fetch()) {
                     $colorup = "black";
                     $colordown = "black";
@@ -211,7 +211,7 @@ $stmt->close();
                             "</div>" .
                             "<div style='overflow:hidden;'>" .
                                 "<h2 style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$titulo</a></h2>" .
-                                "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $login</p>" .
+                                "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por <a href='user.php?login=$login'>$login</a> ($userdoots)</p>" .
                                 "<p style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$countComentarios comentários</a></p>" .
                                 "<div id='preview$memeId' class='w3-panel w3-white w3-round-xlarge w3-border' style='display:none;'><img src='memes/$arquivo'></div>" .
                             "</div>" .
