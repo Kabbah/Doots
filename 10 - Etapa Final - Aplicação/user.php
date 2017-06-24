@@ -1,16 +1,16 @@
 <?php
 session_start();
-if(!isset($_GET["id"])) {
+if(!isset($_GET["login"])) {
     header("location: /");
 }
 
 require ("dbConn.php");
 
-$stmt = $conn->prepare("SELECT login, avatar, doots FROM Usuario WHERE id = ? AND deletado = '0'");
-$stmt->bind_param("s", $_GET["id"]);
+$stmt = $conn->prepare("SELECT id, login, avatar, doots FROM Usuario WHERE login = ? AND deletado = '0'");
+$stmt->bind_param("s", $_GET["login"]);
 $stmt->execute();
 
-$stmt->bind_result($usuarioLogin, $usuarioAvatar, $usuarioDoots);
+$stmt->bind_result($usuarioID, $usuarioLogin, $usuarioAvatar, $usuarioDoots);
 $stmt->fetch();
 $stmt->close();
 ?>
@@ -153,7 +153,7 @@ $stmt->close();
         </div>
         <div>
             <?php
-            if($usuarioLogin != NULL) {
+            if($usuarioID != NULL) {
                 echo "<h1><img class='avatar welcome w3-round' src='avatares/$usuarioAvatar'>$usuarioLogin</h1>" .
                     "<p>Doots: $usuarioDoots </p>";
             }
@@ -169,9 +169,9 @@ $stmt->close();
                 $proximaPagina = $_GET["pagina"] + 1;
             }
             
-            if($usuarioLogin != NULL) {
+            if($usuarioID != NULL) {
                 $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, count(Comentario.id), ((sign(Meme.doots) * log(10, greatest(abs(Meme.doots),1))) + (unix_timestamp(Meme.dataHora) - 1134028003)/45000) AS popularity, MemeDoot.updoot FROM Meme INNER JOIN Usuario ON (Meme.poster = Usuario.id AND Meme.poster = ?) LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' GROUP BY Meme.id ORDER BY popularity DESC LIMIT 10 OFFSET ?");
-                $stmt->bind_param("ssi", $_GET["id"], $_SESSION["id"], $offset);
+                $stmt->bind_param("ssi", $usuarioID, $_SESSION["id"], $offset);
                 $stmt->execute();
 
                 $stmt->store_result();
@@ -223,11 +223,11 @@ $stmt->close();
                 echo "<div class ='w3-center'>" . 
                         "<div class='w3-bar'>";
                 if($proximaPagina >= 3) {
-                        echo "<a href='user.php?id={$_GET["id"]}&pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
+                        echo "<a href='user.php?login={$_GET["login"]}&pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
                 }
                 echo "<span>Página " . ($proximaPagina - 1) . "</span>";
                 if($stmt->num_rows == 10) {
-                    echo "<a href='user.php?id={$_GET["id"]}&pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
+                    echo "<a href='user.php?login={$_GET["login"]}&pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
                 }
                 echo "</div></div>";
 
