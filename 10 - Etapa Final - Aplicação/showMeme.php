@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_GET["meme"])) {
-    header("location:logado.php");
+    header("location: /");
 }
 
 require ("dbConn.php");
