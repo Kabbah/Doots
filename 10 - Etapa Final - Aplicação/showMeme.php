@@ -11,11 +11,11 @@ spl_autoload_register(function($class){
 use \Michelf\Markdown;
 use \Michelf\MarkdownExtra;
                 
-$stmt = $conn->prepare("SELECT Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Meme.deletado, Usuario.login, count(Comentario.id), MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.id = ? LIMIT 1");
+$stmt = $conn->prepare("SELECT Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Meme.deletado, Usuario.login, Usuario.doots, count(Comentario.id), MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.id = ? LIMIT 1");
 $stmt->bind_param("ss", $_SESSION["id"], $_GET["meme"]);
 $stmt->execute();
             
-$stmt->bind_result($titulo, $arquivo, $doots, $datahora, $deletado, $loginUsuario, $countComentarios, $updoot);
+$stmt->bind_result($titulo, $arquivo, $doots, $datahora, $deletado, $loginUsuario, $dootsUsuario, $countComentarios, $updoot);
 $stmt->fetch();
 $stmt->close();
 
@@ -329,7 +329,7 @@ else if($updoot == "0") {
                             "</div>" .
                             "<div style='overflow:hidden;padding-top:20px;'>" .
                                 "<h2 style='margin:0px;'><a href='showMeme.php?meme={$_GET["meme"]}'>$titulo</a>$deletebutton</h2>" .
-                                "<p style='margin:0px;'> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $loginUsuario</p>" .
+                                "<p style='margin:0px;'> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por <a href='user.php?login=$loginUsuario'>$loginUsuario</a> ($dootsUsuario)</p>" .
                                 $formdelete .
                             "</div>" .
                         "</div>" .
@@ -337,26 +337,22 @@ else if($updoot == "0") {
                     
                     echo "<div style='margin:12px;'><h3>Comentários</h3></div>";
                     
-                    if (isset($_SESSION["login"])) {
-                        echo "<div style='margin:12px;'>" .
-                                "<form method='post' action='processComment.php'>" .
-                                    "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
-                                    "<input type='hidden' name='meme' value='{$_GET["meme"]}'>" .
-                                    "<input type='submit'>" .
-                                "</form>" .
-                            "</div>";
-                    } else {
-                       echo "<p style='text-align: center;'> Efetue login para deixar um comentário </p>";
-                    }
+                    echo "<div style='margin:12px;'>" .
+                            "<form method='post' action='processComment.php'>" .
+                                "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
+                                "<input type='hidden' name='meme' value='{$_GET["meme"]}'>" .
+                                "<input type='submit'>" .
+                            "</form>" .
+                        "</div>";
                     
                     if($countComentarios > 0) {
-                        $stmt = $conn->prepare("SELECT Comentario.id, Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar, ComentarioDoot.updoot FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id LEFT JOIN ComentarioDoot ON (Comentario.id = ComentarioDoot.idComentario AND ComentarioDoot.idUsuario = ?) WHERE Comentario.idMeme = ? ORDER BY Comentario.doots DESC, Comentario.dataHora DESC");
+                        $stmt = $conn->prepare("SELECT Comentario.id, Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.doots, Usuario.avatar, ComentarioDoot.updoot FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id LEFT JOIN ComentarioDoot ON (Comentario.id = ComentarioDoot.idComentario AND ComentarioDoot.idUsuario = ?) WHERE Comentario.idMeme = ? ORDER BY Comentario.doots DESC, Comentario.dataHora DESC");
                         $stmt->bind_param("ss", $_SESSION["id"], $_GET["meme"]);
                         $stmt->execute();
                         
                         echo "<ul class='w3-ul' style='margin-top:10px;'>";
                         
-                        $stmt->bind_result($idComentario, $textoComentario, $dootsComentario, $datahoraComentario, $editadoComentario, $deletadoComentario, $datahoraeditComentario, $loginUsuarioComentario, $avatarUsuarioComentario, $updootComentario);
+                        $stmt->bind_result($idComentario, $textoComentario, $dootsComentario, $datahoraComentario, $editadoComentario, $deletadoComentario, $datahoraeditComentario, $loginUsuarioComentario, $dootsUsuarioComentario, $avatarUsuarioComentario, $updootComentario);
                         while($stmt->fetch()) {
                             $colorupcomentario = "black";
                             $colordowncomentario = "black";
@@ -385,11 +381,11 @@ else if($updoot == "0") {
                                             "<p style='margin:0px;'><button class='w3-button' value='$idComentario' id='downcommentbtn$idComentario' style='color:{$colordowncomentario};' onclick='{$undowncomentario}downdoot_comment(this);'><i class='fa fa-arrow-down'></i></button></p>" .
                                         "</div>" .
                                         "<div class='comment-author w3-left' style='margin-right:10px;'>" .
-                                            "<img class='avatar w3-round' src='avatares/$avatarUsuarioComentario'>" .
-                                            "<p>$loginUsuarioComentario</p>" .
+                                            "<a href='user.php?login=$loginUsuarioComentario'><img class='avatar w3-round' src='avatares/$avatarUsuarioComentario'></a>" .
+                                            "<p><a href='user.php?login=$loginUsuarioComentario'>$loginUsuarioComentario</a> ($dootsUsuarioComentario)</p>" .
                                             "<p class='w3-tiny'>" . date_format(date_create($datahoraComentario), "H:i d/m/Y") . "</p>";
                                 if($editadoComentario == true) {
-                                    echo    "<p class='w3-tiny'>Editado as: </p>" .
+                                    echo    "<p class='w3-tiny'>Editado em: </p>" .
                                             "<p class='w3-tiny'>" . date_format(date_create($datahoraeditComentario), "H:i d/m/Y") . "</p>";
                                 }
                                 if(isset($_SESSION["login"]) && $loginUsuarioComentario == $_SESSION['login']) {
@@ -418,7 +414,7 @@ else if($updoot == "0") {
                         
                         $stmt->close();
                     }
-                    elseif (isset($_SESSION["login"])) {
+                    else {
                         echo '<h4 class="comment-wrapper">Ainda não há comentários. Escreva um você! <b>AGORA!</b></h4>';
                     }
                 }

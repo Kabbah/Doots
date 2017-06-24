@@ -153,7 +153,7 @@ session_start();
                 $proximaPagina = $_GET["pagina"] + 1;
             }
             
-            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, count(Comentario.id), ((sign(Meme.doots) * log(10, greatest(abs(Meme.doots),1))) + (unix_timestamp(Meme.dataHora) - 1134028003)/45000) AS popularity, MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' GROUP BY Meme.id ORDER BY popularity DESC LIMIT 10 OFFSET ?");
+            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, Usuario.doots, count(Comentario.id), ((sign(Meme.doots) * log(10, greatest(abs(Meme.doots),1))) + (unix_timestamp(Meme.dataHora) - 1134028003)/45000) AS popularity, MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' GROUP BY Meme.id ORDER BY popularity DESC LIMIT 10 OFFSET ?");
             $stmt->bind_param("si", $_SESSION["id"], $offset);
             $stmt->execute();
             
@@ -161,7 +161,7 @@ session_start();
             
             echo "<ul class='w3-ul'>";
             
-            $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $countComentarios, $popularidade, $updoot);
+            $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $userdoots, $countComentarios, $popularidade, $updoot);
             while($stmt->fetch()) {
                 $colorup = "black";
                 $colordown = "black";
@@ -194,7 +194,7 @@ session_start();
                         "</div>" .
                         "<div style='overflow:hidden;'>" .
                             "<h2 style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$titulo</a></h2>" .
-                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $login</p>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por <a href='user.php?login=$login'>$login</a> ($userdoots)</p>" .
                             "<p style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$countComentarios comentários</a></p>" .
                             "<div id='preview$memeId' class='w3-panel w3-white w3-round-xlarge w3-border' style='display:none;'><img src='memes/$arquivo'></div>" .
                         "</div>" .
@@ -208,7 +208,6 @@ session_start();
             if($proximaPagina >= 3) {
                     echo "<a href='/?pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
             }
-            echo "<span class='page'>Página " . ($proximaPagina - 1) . "</span>";
             if($stmt->num_rows == 10) {
                 echo "<a href='/?pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
             }
