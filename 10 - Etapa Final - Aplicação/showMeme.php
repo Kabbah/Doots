@@ -337,13 +337,17 @@ else if($updoot == "0") {
                     
                     echo "<div style='margin:12px;'><h3>Comentários</h3></div>";
                     
-                    echo "<div style='margin:12px;'>" .
-                            "<form method='post' action='processComment.php'>" .
-                                "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
-                                "<input type='hidden' name='meme' value='{$_GET["meme"]}'>" .
-                                "<input type='submit'>" .
-                            "</form>" .
-                        "</div>";
+                    if (isset($_SESSION["login"])) {
+                        echo "<div style='margin:12px;'>" .
+                                "<form method='post' action='processComment.php'>" .
+                                    "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
+                                    "<input type='hidden' name='meme' value='{$_GET["meme"]}'>" .
+                                    "<input type='submit'>" .
+                                "</form>" .
+                            "</div>";
+                    } else {
+                       echo "<p style='text-align: center;'> Efetue login para deixar um comentário </p>";
+                    }
                     
                     if($countComentarios > 0) {
                         $stmt = $conn->prepare("SELECT Comentario.id, Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.avatar, ComentarioDoot.updoot FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id LEFT JOIN ComentarioDoot ON (Comentario.id = ComentarioDoot.idComentario AND ComentarioDoot.idUsuario = ?) WHERE Comentario.idMeme = ? ORDER BY Comentario.doots DESC, Comentario.dataHora DESC");
@@ -414,7 +418,7 @@ else if($updoot == "0") {
                         
                         $stmt->close();
                     }
-                    else {
+                    elseif (isset($_SESSION["login"])) {
                         echo '<h4 class="comment-wrapper">Ainda não há comentários. Escreva um você! <b>AGORA!</b></h4>';
                     }
                 }
