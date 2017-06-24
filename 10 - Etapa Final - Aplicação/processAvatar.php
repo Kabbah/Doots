@@ -57,10 +57,10 @@
         $query->bind_param("ss", $arquivo, $_SESSION["id"]);
         if($query->execute()) {
             $query->close();
-            setcookie("alteracaoSucesso", "Senha atualizada com sucesso!", time()+10);
+            $_SESSION["avatar"] = $arquivo;
+            setcookie("alteracaoSucesso", "Avatar atualizado com sucesso!", time()+10);
             if($avatarAntigo != "avatar.png") {
                 unlink($pasta . $avatarAntigo);
-                $_SESSION["avatar"] = $arquivo;
             }
             header("location: settings.php");
         }
