@@ -270,6 +270,12 @@ else if($updoot == "0") {
         ?>
         <div class="meme-wrapper w3-purple">
             <?php
+                $deletebutton = "";
+                $formdelete = "";
+                if($_SESSION["login"] == $loginUsuario) {
+                    $deletebutton = "<button class='w3-button' style='padding:0px;margin-left:20px;' onclick='delete_meme(this);'><i class='fa fa-trash-o' aria-hidden='true'></i></button>";
+                    $formdelete = "<form method='post' action='deleteMeme.php' id='deletememe'><input type='hidden' name='memeID' value='{$_GET["meme"]}'></form>";
+                }
                 
                 if($arquivo != NULL && $deletado == false) {
                     echo "<div style='height:100px;'>" .
@@ -279,9 +285,9 @@ else if($updoot == "0") {
                                 "<p style='margin:0px;'><button class='w3-button' value='{$_GET["meme"]}' id='downbtn{$_GET["meme"]}' style='color:$colordown;' onclick='{$undown}downdoot(this);'><i class='fa fa-arrow-down'></i></button></p>" .
                             "</div>" .
                             "<div style='overflow:hidden;padding-top:20px;'>" .
-                                "<h2 style='margin:0px;'><a href='showMeme.php?meme={$_GET["meme"]}'>$titulo</a><button class='w3-button' style='padding:0px;margin-left:20px;' onclick='delete_meme(this);'><i class='fa fa-trash-o' aria-hidden='true'></i></button></h2>" .
+                                "<h2 style='margin:0px;'><a href='showMeme.php?meme={$_GET["meme"]}'>$titulo</a>$deletebutton</h2>" .
                                 "<p style='margin:0px;'> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $loginUsuario</p>" .
-                                "<form method='post' action='deleteMeme.php' id='deletememe'><input type='hidden' name='memeID' value='{$_GET["meme"]}'></form>" .
+                                $formdelete .
                             "</div>" .
                         "</div>" .
                         "<div class='meme-image'><img src='memes/$arquivo'></div>";
