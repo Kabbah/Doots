@@ -186,12 +186,15 @@ if(!isset($_SESSION["login"])) {
             
             echo "</ul>";
             
+            echo "<div class ='w3-center'>" . 
+                    "<div class='w3-bar'>";
             if($proximaPagina >= 3) {
-                    echo "<a href='top.php?pagina=" . ($proximaPagina - 2) . "'>Página anterior</a>";
-                }
-            if($stmt->num_rows == 10) {
-                echo "<a href='top.php?pagina=$proximaPagina'>Próxima página</a>";
+                    echo "<a href='top.php?pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
             }
+            if($stmt->num_rows == 10) {
+                echo "<a href='top.php?pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
+            }
+            echo "</div></div>";
             
             $stmt->close();
             $conn->close();
