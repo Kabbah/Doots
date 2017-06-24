@@ -25,22 +25,22 @@ require ("dbConn.php");
         <div class="settings-wrapper">
             <?php
                 if (isset($_COOKIE["erroEmail"])){
-                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroEmail'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroEmail'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["alteracaoErro"])){
-                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['alteracaoErro'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['alteracaoErro'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["alteracaoSucesso"])){
-                    echo '<div class="error"><p class="w3-panel w3-green"><b>' . $_COOKIE['alteracaoSucesso'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-green"><b>' . $_COOKIE['alteracaoSucesso'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["erroPassword"])){
-                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroPassword'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroPassword'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["erroUpload"])){
-                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroUpload'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['erroUpload'] . '</b></p></div>';
                 }
                 if (isset($_COOKIE["avatarVazio"])){
-                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['avatarVazio'] . '</b></p>';
+                    echo '<div class="error"><p class="w3-panel w3-red"><b>' . $_COOKIE['avatarVazio'] . '</b></p></div>';
                 }
             ?>
         
