@@ -8,7 +8,7 @@ if(!isset($_SESSION["login"])) {
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <title>Login ou Registro</title>
+        <title>Memes - Doots</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/w3.css">
@@ -127,13 +127,22 @@ if(!isset($_SESSION["login"])) {
             <?php
             require ("dbConn.php");
             
-            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Meme.deletado, Usuario.login, count(Comentario.id), MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme GROUP BY Meme.id ORDER BY Meme.dataHora DESC");
-            $stmt->bind_param("s", $_SESSION["id"]);
+            $offset = 0;
+            $proximaPagina = 2;
+            if(isset($_GET["pagina"])) {
+                $offset = 10 * ($_GET["pagina"] - 1);
+                $proximaPagina = $_GET["pagina"] + 1;
+            }
+            
+            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, count(Comentario.id), MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' GROUP BY Meme.id ORDER BY Meme.dataHora DESC LIMIT 10 OFFSET ?");
+            $stmt->bind_param("si", $_SESSION["id"], $offset);
             $stmt->execute();
+            
+            $stmt->store_result();
             
             echo "<ul class='w3-ul'>";
             
-            $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $deletado, $login, $countComentarios, $updoot);
+            $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $countComentarios, $updoot);
             while($stmt->fetch()) {
                 $colorup = "black";
                 $colordown = "black";
@@ -153,29 +162,34 @@ if(!isset($_SESSION["login"])) {
                     $undown = "un_";
                 }
                 
-                if(!$deletado) {
-                    echo "<li class='w3-padding-16'>" .
-                            "<div class='w3-left' style='margin-right:10px;'>" .
-                                "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='upbtn$memeId' style='color:$colorup;' onclick='{$unup}updoot(this);'><i class='fa fa-arrow-up'></i></button></p>" .
-                                "<p id='doots$memeId' style='text-align:center;margin:0px;'>$doots</p>" .
-                                "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='downbtn$memeId' style='color:$colordown;' onclick='{$undown}downdoot(this);'><i class='fa fa-arrow-down'></i></button></p>" .
+                echo "<li class='w3-padding-16'>" .
+                        "<div class='w3-left' style='margin-right:10px;'>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='upbtn$memeId' style='color:$colorup;' onclick='{$unup}updoot(this);'><i class='fa fa-arrow-up'></i></button></p>" .
+                            "<p id='doots$memeId' style='text-align:center;margin:0px;'>$doots</p>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='downbtn$memeId' style='color:$colordown;' onclick='{$undown}downdoot(this);'><i class='fa fa-arrow-down'></i></button></p>" .
+                        "</div>" .
+                        "<div class='w3-left' style='margin-right:10px;'>" .
+                            "<div>" .
+                                "<a style='text-align:center;' href='showMeme.php?meme=$memeId'><img src='memes/$arquivo' style='width:80px;height:80px'></a>" .
                             "</div>" .
-                            "<div class='w3-left' style='margin-right:10px;'>" .
-                                "<div>" .
-                                    "<a style='text-align:center;' href='showMeme.php?meme=$memeId'><img src='memes/$arquivo' style='width:80px;height:80px'></a>" .
-                                "</div>" .
-                            "</div>" .
-                            "<div style='overflow:hidden;'>" .
-                                "<h2 style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$titulo</a></h2>" .
-                                "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $login</p>" .
-                                "<p style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$countComentarios comentários</a></p>" .
-                                "<div id='preview$memeId' class='w3-panel w3-white w3-round-xlarge w3-border' style='display:none;'><img src='memes/$arquivo'></div>" .
-                            "</div>" .
-                        "</li>";
-                }
+                        "</div>" .
+                        "<div style='overflow:hidden;'>" .
+                            "<h2 style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$titulo</a></h2>" .
+                            "<p style='margin:0px;'><button class='w3-button' value='$memeId' onclick='openPreview(this)'><i class='fa fa-image'></i></button> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por $login</p>" .
+                            "<p style='margin:0px;'><a href='showMeme.php?meme=$memeId'>$countComentarios comentários</a></p>" .
+                            "<div id='preview$memeId' class='w3-panel w3-white w3-round-xlarge w3-border' style='display:none;'><img src='memes/$arquivo'></div>" .
+                        "</div>" .
+                    "</li>";
             }
             
             echo "</ul>";
+            
+            if($proximaPagina >= 3) {
+                    echo "<a href='new.php?pagina=" . ($proximaPagina - 2) . "'>Página anterior</a>";
+                }
+            if($stmt->num_rows == 10) {
+                echo "<a href='new.php?pagina=$proximaPagina'>Próxima página</a>";
+            }
             
             $stmt->close();
             $conn->close();
