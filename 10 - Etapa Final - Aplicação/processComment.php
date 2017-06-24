@@ -1,6 +1,10 @@
 <?php
 
 session_start();
+if(!isset($_SESSION['login'])) {
+    header("location:registerLogin.php");
+    exit();
+}
 
 if(!isset($_POST["meme"]) || $_POST["meme"] == "") {
     header("Location: /");
