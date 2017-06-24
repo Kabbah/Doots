@@ -224,7 +224,7 @@ else if($updoot == "0") {
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xmlhttp.send("commentID=" + commentID);
                     
-                    document.getElementById("comentario" + btn.value).innerHTML = "<div class='comment-author w3-left' style='margin-right:10px;'><img class='avatar w3-round' src='avatares/avatar.png'><p>[Excluído]</p><p class='w3-tiny'> 00:00 00/00/0000 </p></div><div style='overflow:hidden;'>[Excluído]</div>";
+                    document.getElementById("comentario" + btn.value).innerHTML = "<div class='w3-left' style='margin-right:10px;width:45.94px;height:98px;'></div><div class='comment-author w3-left' style='margin-right:10px;'><img class='avatar w3-round' src='avatares/avatar.png'><p>[Excluído]</p><p class='w3-tiny'> 00:00 00/00/0000 </p></div><div style='overflow:hidden;'>[Excluído]</div>";
                 }
             }
         </script>
@@ -314,6 +314,8 @@ else if($updoot == "0") {
                             }
                             else {
                                 echo "<li class='comment-wrapper' style='min-height:114px;'>" .
+                                        "<div class='w3-left' style='margin-right:10px;width:45.94px;height:98px;'>" .
+                                        "</div>" .
                                         "<div class='comment-author w3-left' style='margin-right:10px;'>" .
                                             "<img class='avatar w3-round' src='avatares/avatar.png'>" .
                                             "<p>[Excluído]</p>" .
