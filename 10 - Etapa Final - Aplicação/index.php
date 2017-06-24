@@ -208,6 +208,7 @@ session_start();
             if($proximaPagina >= 3) {
                     echo "<a href='/?pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
             }
+            echo "<span class='page'>Página " . ($proximaPagina - 1) . "</span>";
             if($stmt->num_rows == 10) {
                 echo "<a href='/?pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
             }

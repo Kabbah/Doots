@@ -1,8 +1,5 @@
 <?php
 session_start();
-if(!isset($_SESSION["login"])) {
-    header("Location: registerLogin.php");
-}
 ?>
 
 <!DOCTYPE html>
@@ -26,83 +23,103 @@ if(!isset($_SESSION["login"])) {
         </script>
         <script>
             function updoot(btn) {
-                var memeID = btn.value;
-                
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "updoot.php", true);
-                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("memeID=" + memeID);
-                
-                // Depois de fazer um updoot, tem que mudar o botão.
-                btn.setAttribute("style", "color:purple;");
-                btn.setAttribute("onclick", "un_updoot(this);");
-                
-                // Altera o texto da pontuação.
-                if(document.getElementById("downbtn" + btn.value).getAttribute("onclick") == "un_downdoot(this);") {
-                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 2;
-                    
-                    // Também tem que resetar o outro botão.
-                    document.getElementById("downbtn" + btn.value).setAttribute("style", "color:black;");
-                    document.getElementById("downbtn" + btn.value).setAttribute("onclick", "downdoot(this);");
-                }
-                else {
-                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 1;
-                }
+                <?php
+                    if (isset($_SESSION["login"])) {
+                        echo 'var memeID = btn.value;
+
+                        var xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open("POST", "updoot.php", true);
+                        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xmlhttp.send("memeID=" + memeID);
+
+                        // Depois de fazer um updoot, tem que mudar o botão.
+                        btn.setAttribute("style", "color:#e600e6;");
+                        btn.setAttribute("onclick", "un_updoot(this);");
+
+                        // Altera o texto da pontuação.
+                        if(document.getElementById("downbtn" + btn.value).getAttribute("onclick") == "un_downdoot(this);") {
+                            document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 2;
+
+                            // Também tem que resetar o outro botão.
+                            document.getElementById("downbtn" + btn.value).setAttribute("style", "color:black;");
+                            document.getElementById("downbtn" + btn.value).setAttribute("onclick", "downdoot(this);");
+                        }
+                        else {
+                            document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 1;
+                        }';
+                    }
+                    else {
+                        echo 'window.location = "registerLogin.php";';
+                    }
+                ?>
             }
             function downdoot(btn) {
-                var memeID = btn.value;
-                
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "downdoot.php", true);
-                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("memeID=" + memeID);
-                
-                // Depois de fazer um downdoot, tem que mudar o botão.
-                btn.setAttribute("style", "color:purple;");
-                btn.setAttribute("onclick", "un_downdoot(this);");
-                
-                // Altera o texto da pontuação.
-                if(document.getElementById("upbtn" + btn.value).getAttribute("onclick") == "un_updoot(this);") {
-                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 2;
-                    
-                    // Também tem que resetar o outro botão.
-                    document.getElementById("upbtn" + btn.value).setAttribute("style", "color:black;");
-                    document.getElementById("upbtn" + btn.value).setAttribute("onclick", "updoot(this);");
-                }
-                else {
-                    document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 1;
-                }
+                <?php 
+                    if (isset($_SESSION["login"])) {        
+                        echo 'var memeID = btn.value;
+
+                        var xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open("POST", "downdoot.php", true);
+                        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xmlhttp.send("memeID=" + memeID);
+
+                        // Depois de fazer um downdoot, tem que mudar o botão.
+                        btn.setAttribute("style", "color:#e600e6;");
+                        btn.setAttribute("onclick", "un_downdoot(this);");
+
+                        // Altera o texto da pontuação.
+                        if(document.getElementById("upbtn" + btn.value).getAttribute("onclick") == "un_updoot(this);") {
+                            document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 2;
+
+                            // Também tem que resetar o outro botão.
+                            document.getElementById("upbtn" + btn.value).setAttribute("style", "color:black;");
+                            document.getElementById("upbtn" + btn.value).setAttribute("onclick", "updoot(this);");
+                        }
+                        else {
+                            document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 1;
+                        }';
+                    }
+                    else {
+                        echo 'window.location = "registerLogin.php";';
+                    }
+                        
+                ?>
             }
-            function un_updoot(btn) {
-                var memeID = btn.value;
-                
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "un_updoot.php", true);
-                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("memeID=" + memeID);
-                
-                // Depois de fazer um un_updoot, tem que mudar o botão.
-                btn.setAttribute("style", "color:black;");
-                btn.setAttribute("onclick", "updoot(this);");
-                
-                // Altera o texto da pontuação.
-                document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 1;
+            <?php 
+                if (isset($_SESSION["login"])) {
+                    echo '
+                    function un_updoot(btn) {
+                        var memeID = btn.value;
+
+                        var xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open("POST", "un_updoot.php", true);
+                        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xmlhttp.send("memeID=" + memeID);
+
+                        // Depois de fazer um un_updoot, tem que mudar o botão.
+                        btn.setAttribute("style", "color:black;");
+                        btn.setAttribute("onclick", "updoot(this);");
+
+                        // Altera o texto da pontuação.
+                        document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) - 1;
+                    }
+                    function un_downdoot(btn) {
+                        var memeID = btn.value;
+
+                        var xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open("POST", "un_downdoot.php", true);
+                        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xmlhttp.send("memeID=" + memeID);
+
+                        // Depois de fazer um un_downdoot, tem que mudar o botão.
+                        btn.setAttribute("style", "color:black;");
+                        btn.setAttribute("onclick", "downdoot(this);");
+
+                        // Altera o texto da pontuação.
+                        document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 1;
+                    } ';
             }
-            function un_downdoot(btn) {
-                var memeID = btn.value;
-                
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "un_downdoot.php", true);
-                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("memeID=" + memeID);
-                
-                // Depois de fazer um un_downdoot, tem que mudar o botão.
-                btn.setAttribute("style", "color:black;");
-                btn.setAttribute("onclick", "downdoot(this);");
-                
-                // Altera o texto da pontuação.
-                document.getElementById("doots" + btn.value).innerHTML = parseInt(document.getElementById("doots" + btn.value).innerHTML) + 1;
-            }
+            ?>
         </script>
     </head>
     
@@ -189,10 +206,11 @@ if(!isset($_SESSION["login"])) {
             echo "<div class ='w3-center'>" . 
                     "<div class='w3-bar'>";
             if($proximaPagina >= 3) {
-                    echo "<a href='new.php?pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
+                    echo "<a href='/?pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
             }
+            echo "<span class='page'>Página " . ($proximaPagina - 1) . "</span>";
             if($stmt->num_rows == 10) {
-                echo "<a href='new.php?pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
+                echo "<a href='/?pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
             }
             echo "</div></div>";
             

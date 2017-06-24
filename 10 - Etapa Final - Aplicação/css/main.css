@@ -43,7 +43,6 @@
     margin: 0 12px;
     max-width: inherit;
     max-height: 600px;
-    padding: 6px;
 }
 .meme-image img {
     object-fit: cover;
@@ -119,7 +118,10 @@
     text-align: center;
 }
 
-
+.page {
+    padding-left: 8px;
+    padding-right: 8px;
+}
 
 #cog {
     height: 32px;
