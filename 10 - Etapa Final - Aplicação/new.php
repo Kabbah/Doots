@@ -122,8 +122,10 @@ if(!isset($_SESSION["login"])) {
             </form>
         </div>
         <div>
-            <!-- Isso vai ser feio pra caramba, é só pra ficar meio navegável. -->
-            <p><a href="createMeme.php">Criar um meme</a></p>
+            <p class="w3-purple w3-button" style="margin-left: 10px;">
+                <a href="createMeme.php">Criar um meme</a>
+            </p>
+            
             <?php
             require ("dbConn.php");
             
