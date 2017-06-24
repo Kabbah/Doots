@@ -227,6 +227,33 @@ else if($updoot == "0") {
                     document.getElementById("comentario" + btn.value).innerHTML = "<div class='w3-left' style='margin-right:10px;width:45.94px;height:98px;'></div><div class='comment-author w3-left' style='margin-right:10px;'><img class='avatar w3-round' src='avatares/avatar.png'><p>[Excluído]</p><p class='w3-tiny'> 00:00 00/00/0000 </p></div><div style='overflow:hidden;'>[Excluído]</div>";
                 }
             }
+            function show_edit_comment(btn) {
+                var commentID = btn.value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if(this.readyState == 4 && this.status == 200) {
+                        document.getElementById("textocomentario" + btn.value).innerHTML = "<textarea style='width:800px;height:100px;resize:none;' id='editcomentario" + btn.value + "'>" + this.responseText + "</textarea><br><button onclick='edit_comment(this);' value='" + btn.value + "'>Enviar</button>";
+                    }
+                }
+                xmlhttp.open("POST", "getCommentText.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("commentID=" + commentID);
+            }
+            function edit_comment(btn) {
+                var commentID = btn.value;
+                var commentText = document.getElementById("editcomentario" + btn.value).value;
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if(this.readyState == 4 && this.status == 200) {
+                        document.getElementById("textocomentario" + btn.value).innerHTML = this.responseText;
+                    }
+                }
+                xmlhttp.open("POST", "edit_comment.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("commentID=" + commentID + "&commentText=" + commentText);
+            }
         </script>
     </head>
     
@@ -305,11 +332,11 @@ else if($updoot == "0") {
                                             "<p class='w3-tiny'>" . date_format(date_create($datahoraeditComentario), "H:i d/m/Y") . "</p>";
                                 }
                                 if($loginUsuarioComentario == $_SESSION['login']) {
-                                    echo    "<p><button class='w3-small w3-button text-btn' style='padding:0px;' value='$idComentario' onclick='edit_comment(this);'><i class='fa fa-pencil' aria-hidden='true'> Editar</i></button></p>" .
+                                    echo    "<p><button class='w3-small w3-button text-btn' style='padding:0px;' value='$idComentario' onclick='show_edit_comment(this);'><i class='fa fa-pencil' aria-hidden='true'> Editar</i></button></p>" .
                                             "<p><button class='w3-small w3-button text-btn' style='padding:0px;' value='$idComentario' onclick='delete_comment(this);'><i class='fa fa-trash-o' aria-hidden='true'> Excluir</i></button></p>";
                                 }
                                 echo        "</div>" .
-                                        "<div style='overflow:hidden;'>$textoComentarioMarkdown</div>" .
+                                        "<div style='overflow:hidden;' id='textocomentario$idComentario'>$textoComentarioMarkdown</div>" .
                                     "</li>";
                             }
                             else {
