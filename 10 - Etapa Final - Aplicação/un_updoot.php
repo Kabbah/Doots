@@ -2,6 +2,10 @@
 
 session_start();
 
+if(!isset($_SESSION['login'])) {
+    exit();
+}
+
 require("dbConn.php");
 
 $conn->begin_transaction();
