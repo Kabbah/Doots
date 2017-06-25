@@ -1,3 +1,5 @@
+SET NAMES utf8;
+
 CREATE TABLE IF NOT EXISTS Usuario (
 	id INT AUTO_INCREMENT,
 	login VARCHAR(255) NOT NULL UNIQUE,
@@ -133,3 +135,20 @@ CREATE TABLE IF NOT EXISTS ComentarioReacao (
     IDComentario -> Comentario(ID)
     IDUsuario -> Usuario(ID)
     IDReacao -> Reacao(ID) */
+
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Barreto', 'Barreto.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Café', 'Cafe.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Dinheiro', 'Dinheiro.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Espanto', 'Espanto.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('FeelsBadMan', 'FeelsBadMan.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Fezes', 'Fezes.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Fogo', 'Fogo.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Iluminati', 'Iluminati.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Lixo', 'Lixo.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Memes', 'Memes.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Neutro', 'Neutro.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Pizza', 'Pizza.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Ponta-Cabeça', 'Ponta-Cabeca.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Sorriso', 'Sorriso.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Triste', 'Triste.png');
+INSERT IGNORE INTO Reacao (label, imagem) VALUES ('Pensando', 'Pensando.png');
