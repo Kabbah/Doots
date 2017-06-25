@@ -435,17 +435,15 @@ else if($updoot == "0") {
                     
                     $stmt->close();
                     
-                    echo "<p id='debug'>Reagir: " .
-                            "<button class='w3-button' onclick='show_reaction_menu();'><i class='fa fa-smile-o'></i></button>" .
+                    echo    "<div class='w3-right'><button class='w3-button w3-right reaction-btn' onclick='show_reaction_menu();'><span><i class='fa fa-smile-o'></span></i></button>" .
                             "<div id='reaction-menu' style='display:none;'>";
                     
                     foreach($reacaoLabels as $r_id => $r_label) {
                         echo "<button class='w3-button' value='$r_id' onclick='react(this);'><img src='imagens/{$reacaoImagens[$r_id]}'></button>";
                     }
                     
-                    echo "</div>" .
-                        "</p>" .
-                        "<h3>Comentários</h3>" .
+                    echo "</div></div>" .
+                        "<h3 id='comentarios'>Comentários</h3>" .
                         "<div>" .
                             "<form method='post' action='processComment.php'>" .
                             "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
