@@ -53,8 +53,9 @@
     max-height: 600px;
 }
 .meme-image img {
-    object-fit: cover;
+    object-fit: contain;
     max-height: inherit;
+    max-width: 1076px;
     display: block;
     margin: 0 auto;
 }
@@ -129,6 +130,8 @@
 .page {
     padding-left: 8px;
     padding-right: 8px;
+    padding-top: 8px;
+    display: inline-block;
 }
 
 #cog {
