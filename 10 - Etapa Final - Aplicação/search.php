@@ -1,5 +1,8 @@
 <?php
 session_start();
+if(!isset($_GET["search"])) {
+    header("location: /");
+}
 ?>
 
 <!DOCTYPE html>
@@ -127,20 +130,10 @@ session_start();
         <?php
             require('banner.php');
         ?>
-        <div class="w3-bar w3-purple">
-            <a href="/" class="w3-bar-item w3-button w3-mobile" style="background-color:#812092;">populares</a>
-            <a href="new.php" class="w3-bar-item w3-button w3-mobile">novos</a>
-            <a href="top.php" class="w3-bar-item w3-button w3-mobile">no topo</a>
-            <form class="w3-bar-item w3-right w3-mobile" style="padding: 0px;" method="get" action="search.php">
-                <input type="text" class="w3-bar-item w3-input" style="background-color:#eac0f1;" placeholder="Buscar..." name="search">
-                <button type="submit" class="w3-bar-item w3-button w3-right">
-                    <i class="fa fa-search"></i>
-                </button>
-            </form>
+        <div>
+            <h2 style="margin-left:10px;">Pesquisa</h2>
         </div>
         <div>
-            <a class="w3-purple w3-button" href="createMeme.php" style="margin-left:10px;margin-top:15px;padding:8px 16px;">Criar um meme</a>
-            
             <?php
             require ("dbConn.php");
             
@@ -151,21 +144,27 @@ session_start();
                 $proximaPagina = $_GET["pagina"] + 1;
             }
             
-            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, Usuario.doots, count(Comentario.id), ((sign(Meme.doots) * log(10, greatest(abs(Meme.doots),1))) + (unix_timestamp(Meme.dataHora) - 1134028003)/45000) AS popularity, MemeDoot.updoot FROM Meme INNER JOIN Usuario ON Meme.poster = Usuario.id LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' GROUP BY Meme.id ORDER BY popularity DESC LIMIT 10 OFFSET ?");
-            $stmt->bind_param("si", $_SESSION["id"], $offset);
+            $search = "%" . $_GET["search"] . "%";
+            
+            $stmt = $conn->prepare("SELECT Meme.id, Meme.titulo, Meme.arquivo, Meme.doots, Meme.dataHora, Usuario.login, Usuario.doots, count(Comentario.id), ((sign(Meme.doots) * log(10, greatest(abs(Meme.doots),1))) + (unix_timestamp(Meme.dataHora) - 1134028003)/45000) AS popularity, MemeDoot.updoot FROM Meme INNER JOIN Usuario ON (Meme.poster = Usuario.id) LEFT JOIN MemeDoot ON (Meme.id = MemeDoot.idMeme AND MemeDoot.idUsuario = ?) LEFT JOIN Comentario ON Meme.id = Comentario.idMeme WHERE Meme.deletado = '0' AND (lower(Meme.titulo) LIKE lower(?) OR lower(Usuario.login) LIKE lower(?)) GROUP BY Meme.id ORDER BY popularity DESC LIMIT 10 OFFSET ?");
+            $stmt->bind_param("sssi", $_SESSION["id"], $search, $search, $offset);
             $stmt->execute();
-            
+
             $stmt->store_result();
-            
+
             echo "<ul class='w3-ul'>";
             
+            if($stmt->num_rows == 0) {
+                echo "<li class='w3-padding-16'>Nenhum resultado encontrado.</li>";
+            }
+
             $stmt->bind_result($memeId, $titulo, $arquivo, $doots, $datahora, $login, $userdoots, $countComentarios, $popularidade, $updoot);
             while($stmt->fetch()) {
                 $colorup = "black";
                 $colordown = "black";
                 $unup = "";
                 $undown = "";
-                
+
                 if($updoot == "1") {
                     $colorup = "#e600e6";
                     $colordown = "black";
@@ -178,7 +177,7 @@ session_start();
                     $unup = "";
                     $undown = "un_";
                 }
-                
+
                 echo "<li class='w3-padding-16'>" .
                         "<div class='w3-left' style='margin-right:10px;'>" .
                             "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='upbtn$memeId' style='color:$colorup;' onclick='{$unup}updoot(this);'><i class='fa fa-arrow-up'></i></button></p>" .
@@ -198,21 +197,22 @@ session_start();
                         "</div>" .
                     "</li>";
             }
-            
+
             echo "</ul>";
-            
+
             echo "<div class ='w3-center'>" . 
                     "<div class='w3-bar'>";
             if($proximaPagina >= 3) {
-                    echo "<a href='/?pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
+                echo "<a href='search.php?search={$_GET["search"]}&pagina=" . ($proximaPagina - 2) . " 'class='w3-button w3-border w3-round'>&#10094; Anterior</a>";
             }
-            echo "<span class='page'>Página " . ($proximaPagina - 1) . "</span>";
+            echo "<span>Página " . ($proximaPagina - 1) . "</span>";
             if($stmt->num_rows == 10) {
-                echo "<a href='/?pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
+                echo "<a href='search.php?search={$_GET["search"]}&pagina=$proximaPagina' class='w3-button w3-right w3-border w3-round'>Próxima &#10095;</a>";
             }
             echo "</div></div>";
-            
+
             $stmt->close();
+            
             $conn->close();
             ?>
         </div>

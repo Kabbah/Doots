@@ -140,17 +140,6 @@ $stmt->close();
         <?php
             require('banner.php');
         ?>
-        <div class="w3-bar w3-purple">
-            <a href="/" class="w3-bar-item w3-button w3-mobile" style="background-color:#812092;">populares</a>
-            <a href="new.php" class="w3-bar-item w3-button w3-mobile">novos</a>
-            <a href="top.php" class="w3-bar-item w3-button w3-mobile">no topo</a>
-            <form class="w3-bar-item w3-right w3-mobile" style="padding: 0px;">
-                <input type="text" class="w3-bar-item w3-input" style="background-color:#eac0f1;" placeholder="Buscar...">
-                <button type="submit" class="w3-bar-item w3-button w3-right">
-                    <i class="fa fa-search"></i>
-                </button>
-            </form>
-        </div>
         <div>
             <?php
             if($usuarioID != NULL) {
