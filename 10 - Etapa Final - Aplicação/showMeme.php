@@ -305,6 +305,74 @@ else if($updoot == "0") {
                 }
             }
         </script>
+        <script>
+            function show_reaction_menu() {
+                <?php 
+                    if (isset($_SESSION["login"])) {
+                        echo 'if(document.getElementById("reaction-menu").getAttribute("style") == "display:none;") {'.
+                                'document.getElementById("reaction-menu").setAttribute("style", "display:block;");'.
+                            '}'. 
+                            'else if(document.getElementById("reaction-menu").getAttribute("style") == "display:block;") {'.
+                                'document.getElementById("reaction-menu").setAttribute("style", "display:none;");'.
+                            '}';
+                    }
+                    else {
+                        echo 'window.location = "registerLogin.php";';
+                    }
+                ?>
+            }
+            function react(btn) {
+                <?php 
+                    if (isset($_SESSION["login"])) {
+                        echo "var reacao = btn.value;".
+                
+                            "var xmlhttp = new XMLHttpRequest();".
+                            "xmlhttp.open('POST', 'processReaction.php', true);".
+                            "xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');".
+                            "xmlhttp.send('reacao=' + btn.value + '&meme={$_GET["meme"]}');".
+
+                            "if(document.getElementById('reacao' + reacao).getAttribute('onclick') == 'react(this);') {".
+                                "document.getElementById('reacao' + reacao).setAttribute('style', 'display:inline;background-color:#e600e6;');".
+                                "document.getElementById('reacao' + reacao).setAttribute('onclick', 'un_react(this);');".
+                                "document.getElementById('pontosreacao' + reacao).innerHTML = parseInt(document.getElementById('pontosreacao' + reacao).innerHTML) + 1;".
+                            "}";
+                            echo 'if(document.getElementById("reaction-menu").getAttribute("style") == "display:block;") {'.
+                                'document.getElementById("reaction-menu").setAttribute("style", "display:none;");'.
+                            '}';
+                    }
+                    else {
+                        echo 'window.location = "registerLogin.php";';
+                    }
+                ?>
+            }
+            function un_react(btn) {
+                <?php 
+                    if (isset($_SESSION["login"])) {
+                        echo "var reacao = btn.value;".
+                
+                            "var xmlhttp = new XMLHttpRequest();".
+                            "xmlhttp.open('POST', 'processUndoReaction.php', true);".
+                            "xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');".
+                            "xmlhttp.send('reacao=' + btn.value + '&meme={$_GET["meme"]}');".
+
+                            "if(document.getElementById('reacao' + reacao).getAttribute('onclick') == 'un_react(this);') {".
+                                "var points = parseInt(document.getElementById('pontosreacao' + reacao).innerHTML) - 1;".
+                                "document.getElementById('pontosreacao' + reacao).innerHTML = points;".
+                                "if(points == 0) {".
+                                    "document.getElementById('reacao' + reacao).setAttribute('style', 'display:none;background-color:purple;');".
+                                "}".
+                                "else {".
+                                    "document.getElementById('reacao' + reacao).setAttribute('style', 'display:inline;background-color:purple;');".
+                                "}".
+                                "document.getElementById('reacao' + reacao).setAttribute('onclick', 'react(this);');".
+                            "}";
+                    }
+                    else {
+                        echo 'window.location = "registerLogin.php";';
+                    }
+                ?>
+            }
+        </script>
     </head>
     
     <body>
@@ -335,15 +403,58 @@ else if($updoot == "0") {
                         "</div>" .
                         "<div class='meme-image'><img src='memes/$arquivo'></div>";
                     
-                    echo "<div style='margin:12px;'><h3>Comentários</h3></div>";
+                    echo "<div style='margin:12px;'>";
                     
-                    echo "<div style='margin:12px;'>" .
+                    $stmt = $conn->prepare("SELECT Reacao.id, Reacao.label, Reacao.imagem, count(MR1.idReacao), MR2.idUsuario FROM Reacao LEFT JOIN MemeReacao AS MR1 ON (Reacao.id = MR1.idReacao AND MR1.idMeme = ?) LEFT JOIN MemeReacao AS MR2 ON (MR2.idMeme = ? AND MR2.idUsuario=? AND MR2.idReacao = MR1.idReacao) GROUP BY Reacao.id");
+                    $stmt->bind_param("sss", $_GET["meme"], $_GET["meme"], $_SESSION["id"]);
+                    $stmt->execute();
+                    $stmt->bind_result($reacaoID, $reacaoLabel, $reacaoImagem, $reacaoCount, $reacaoUsuario);
+                    
+                    $reacaoLabels = array();
+                    $reacaoImagens = array();
+                    
+                    echo "<p>";
+                    while($stmt->fetch()) {
+                        $unreact = "";
+                        $color = "purple";
+                        if($reacaoUsuario) {
+                            $unreact = "un_";
+                            $color = "#e600e6";
+                        }
+                        
+                        if($reacaoCount != 0) {
+                            echo "<button class='w3-button' id='reacao$reacaoID' value='$reacaoID' onclick='{$unreact}react(this);' style='display:inline;background-color:$color;'><img class='reaction-img' src='imagens/$reacaoImagem'> <span id='pontosreacao$reacaoID'>$reacaoCount</span></button>";
+                        }
+                        else {
+                            echo "<button class='w3-button' id='reacao$reacaoID' value='$reacaoID' onclick='{$unreact}react(this);' style='display:none;background-color:$color;'><img class='reaction-img' src='imagens/$reacaoImagem'> <span id='pontosreacao$reacaoID'>$reacaoCount</span></button>";
+                        }
+                        $reacaoLabels[$reacaoID] = $reacaoLabel;
+                        $reacaoImagens[$reacaoID] = $reacaoImagem;
+                    }
+                    echo "</p>";
+                    
+                    $stmt->close();
+                    
+                    echo "<p id='debug'>Reagir: " .
+                            "<button class='w3-button' onclick='show_reaction_menu();'><i class='fa fa-smile-o'></i></button>" .
+                            "<div id='reaction-menu' style='display:none;'>";
+                    
+                    foreach($reacaoLabels as $r_id => $r_label) {
+                        echo "<button class='w3-button' value='$r_id' onclick='react(this);'><img src='imagens/{$reacaoImagens[$r_id]}'></button>";
+                    }
+                    
+                    echo "</div>" .
+                        "</p>" .
+                        "<h3>Comentários</h3>" .
+                        "<div>" .
                             "<form method='post' action='processComment.php'>" .
-                                "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
-                                "<input type='hidden' name='meme' value='{$_GET["meme"]}'>" .
-                                "<input type='submit'>" .
+                            "<textarea name='comentario' style='width:100%;height:100px;resize:none;' placeholder='Escreva um comentário aqui!'></textarea>" .
+                            "<input type='hidden' name='meme' value='{$_GET["meme"]}'>" .
+                            "<input type='submit'>" .
                             "</form>" .
                         "</div>";
+                    
+                    //echo "<div style='margin:12px;'></div>";
                     
                     if($countComentarios > 0) {
                         $stmt = $conn->prepare("SELECT Comentario.id, Comentario.conteudo, Comentario.doots, Comentario.dataHora, Comentario.editado, Comentario.deletado, Comentario.dataHoraEdit, Usuario.login, Usuario.doots, Usuario.avatar, ComentarioDoot.updoot FROM Comentario INNER JOIN Usuario ON Comentario.idUsuario = Usuario.id LEFT JOIN ComentarioDoot ON (Comentario.id = ComentarioDoot.idComentario AND ComentarioDoot.idUsuario = ?) WHERE Comentario.idMeme = ? ORDER BY Comentario.doots DESC, Comentario.dataHora DESC");
@@ -417,6 +528,8 @@ else if($updoot == "0") {
                     else {
                         echo '<h4 class="comment-wrapper">Ainda não há comentários. Escreva um você! <b>AGORA!</b></h4>';
                     }
+                    
+                    echo '</div>';
                 }
                 else {
                     echo '<h1 class="meme-title">Hic Sunt Dracones</h1>';

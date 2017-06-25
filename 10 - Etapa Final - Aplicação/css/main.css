@@ -1,3 +1,8 @@
+* {
+    position: relative;
+    z-index: 0;
+}
+
 .banner {
     min-width: 685px;
 }
@@ -68,8 +73,6 @@
 }
 
 .comment-wrapper {
-    margin-left: 12px;
-    margin-right: 12px;
     color: black;
     padding: 6px!important;
     display: block;
@@ -170,4 +173,32 @@ a {
 
 a:hover {
     color: #e600e6!important;
+}
+
+#reaction-menu {
+    position: absolute;
+    left: 110px;
+    top: 10px;
+    z-index: 99;
+    width: 200px;
+    height: 150px;
+    overflow-y: scroll;
+    background-color: #dfd3f8;
+}
+
+#reaction-menu button {
+    position: relative;
+    z-index: 99;
+    padding: 5px;
+}
+
+#reaction-menu button img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.reaction-img {
+    width: 25px;
+    height: 25px;
 }
