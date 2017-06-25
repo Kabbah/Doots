@@ -322,14 +322,14 @@ else if($updoot == "0") {
                 
                 if($arquivo != NULL && $deletado == false) {
                     echo "<div style='height:100px;'>" .
-                            "<div class='w3-left' style='margin-right:10px;'>" .
+                            "<div class='w3-left' style='margin-right:2px;'>" .
                                 "<p style='margin:0px;'><button class='w3-button' value='{$_GET["meme"]}' id='upbtn{$_GET["meme"]}' style='color:$colorup;' onclick='{$unup}updoot(this);'><i class='fa fa-arrow-up'></i></button></p>" .
                                 "<p id='doots{$_GET["meme"]}' style='text-align:center;margin:0px;'>$doots</p>" .
                                 "<p style='margin:0px;'><button class='w3-button' value='{$_GET["meme"]}' id='downbtn{$_GET["meme"]}' style='color:$colordown;' onclick='{$undown}downdoot(this);'><i class='fa fa-arrow-down'></i></button></p>" .
                             "</div>" .
                             "<div style='overflow:hidden;padding-top:20px;'>" .
-                                "<h2 style='margin:0px;'><a href='showMeme.php?meme={$_GET["meme"]}'>$titulo</a>$deletebutton</h2>" .
-                                "<p style='margin:0px;'> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por <a href='user.php?login=$loginUsuario'>$loginUsuario</a> ($dootsUsuario)</p>" .
+                                "<h2 style='margin:0px;'><a class='link-branco' href='showMeme.php?meme={$_GET["meme"]}'>$titulo</a>$deletebutton</h2>" .
+                                "<p style='margin:0px;'> Postado em " . date_format(date_create($datahora), "H:i d/m/Y") . " por <a class='link-branco' href='user.php?login=$loginUsuario'>$loginUsuario</a> ($dootsUsuario)</p>" .
                                 $formdelete .
                             "</div>" .
                         "</div>" .
@@ -375,7 +375,7 @@ else if($updoot == "0") {
                             if(!$deletadoComentario) {
                                 $textoComentarioMarkdown = Markdown::defaultTransform($textoComentario);
                                 echo "<li class='comment-wrapper' style='min-height:114px;' id='comentario$idComentario'>" .
-                                        "<div class='w3-left' style='margin-right:10px;'>" .
+                                        "<div class='w3-left' style='margin-right:2px;'>" .
                                             "<p style='margin:0px;'><button class='w3-button' value='$idComentario' id='upcommentbtn$idComentario' style='color:{$colorupcomentario};' onclick='{$unupcomentario}updoot_comment(this);'><i class='fa fa-arrow-up'></i></button></p>" .
                                             "<p id='dootscomment$idComentario' style='text-align:center;margin:0px;'>$dootsComentario</p>" .
                                             "<p style='margin:0px;'><button class='w3-button' value='$idComentario' id='downcommentbtn$idComentario' style='color:{$colordowncomentario};' onclick='{$undowncomentario}downdoot_comment(this);'><i class='fa fa-arrow-down'></i></button></p>" .

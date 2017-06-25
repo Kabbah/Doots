@@ -6,7 +6,7 @@
                     "<a href='user.php?login={$_SESSION["login"]}'>" .
                         "<img class='avatar welcome w3-round' src='avatares/{$_SESSION['avatar']}' alt='Avatar' style='margin-right:5px;'>" .
                     "</a>" .
-                    "<a href='user.php?login={$_SESSION["login"]}'>" .
+                    "<a class='link-branco' href='user.php?login={$_SESSION["login"]}'>" .
                         "<h2 class='welcome' style='margin-right:20px;'>{$_SESSION['login']}</h2>" .
                     "</a>" .
                     "<a href='settings.php' style='vertical-align:middle;margin-right:10px;'><i class='fa fa-cog' style='font-size:36px;color:black;vertical-align:middle;'></i></a>" .
