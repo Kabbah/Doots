@@ -140,14 +140,15 @@ $stmt->close();
         <?php
             require('banner.php');
         ?>
-        <div>
+        <div class="userinfo-wrapper">
             <?php
             if($usuarioID != NULL) {
-                echo "<h1><img class='avatar welcome w3-round' src='avatares/$usuarioAvatar'>$usuarioLogin</h1>" .
-                    "<p>Doots: $usuarioDoots </p>";
+                echo "<h1><img class='userinfo-img w3-round w3-left' src='avatares/$usuarioAvatar'>$usuarioLogin</h1>" .
+                    "<h3>Doots: $usuarioDoots </h3>";
             }
             ?>
         </div>
+        <div class="userinfo-separador w3-purple"></div>
         <div>
             <?php
             
@@ -187,8 +188,8 @@ $stmt->close();
                         $undown = "un_";
                     }
 
-                    echo "<li class='w3-padding-16'>" .
-                            "<div class='w3-left' style='margin-right:10px;'>" .
+                    echo "<li class='w3-padding-16 meme-index'>" .
+                            "<div class='w3-left' style='margin-right:2px;'>" .
                                 "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='upbtn$memeId' style='color:$colorup;' onclick='{$unup}updoot(this);'><i class='fa fa-arrow-up'></i></button></p>" .
                                 "<p id='doots$memeId' style='text-align:center;margin:0px;'>$doots</p>" .
                                 "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='downbtn$memeId' style='color:$colordown;' onclick='{$undown}downdoot(this);'><i class='fa fa-arrow-down'></i></button></p>" .

@@ -17,6 +17,11 @@
     -ms-transform:translate(-50%,0%);
 }
 
+.userinfo-wrapper {
+    display: table;
+    margin: 0 auto;
+}
+
 .form-submit-button {
     margin-bottom: 16px;
     margin-top: 16px;
@@ -201,4 +206,20 @@ a:hover {
 .reaction-img {
     width: 25px;
     height: 25px;
+}
+
+.userinfo-img {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    height: 128px;
+    width: 128px;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+.userinfo-separador {
+    width: 100%;
+    height: 5px;
 }

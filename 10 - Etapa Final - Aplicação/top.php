@@ -177,8 +177,8 @@ session_start();
                     $undown = "un_";
                 }
                 
-                echo "<li class='w3-padding-16'>" .
-                        "<div class='w3-left' style='margin-right:10px;'>" .
+                echo "<li class='w3-padding-16 meme-index'>" .
+                        "<div class='w3-left' style='margin-right:2px;'>" .
                             "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='upbtn$memeId' style='color:$colorup;' onclick='{$unup}updoot(this);'><i class='fa fa-arrow-up'></i></button></p>" .
                             "<p id='doots$memeId' style='text-align:center;margin:0px;'>$doots</p>" .
                             "<p style='margin:0px;'><button class='w3-button' value='$memeId' id='downbtn$memeId' style='color:$colordown;' onclick='{$undown}downdoot(this);'><i class='fa fa-arrow-down'></i></button></p>" .
