@@ -139,9 +139,7 @@ session_start();
             </form>
         </div>
         <div>
-            <p class="w3-purple w3-button" style="margin-left: 10px;">
-                <a href="createMeme.php">Criar um meme</a>
-            </p>
+            <a class="w3-purple w3-button" href="createMeme.php" style="margin-left:10px;margin-top:15px;padding:8px 16px;">Criar um meme</a>
             
             <?php
             require ("dbConn.php");
