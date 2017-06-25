@@ -38,8 +38,15 @@
 .meme-index {
     word-wrap: break-word;
 }
+
 .meme-index img {
     object-fit: cover;
+}
+.meme-index:nth-child(odd){
+    background: white;
+}
+.meme-index:nth-child(even){
+    background: #ede6fb;
 }
 
 .meme-time {
