@@ -20,6 +20,10 @@
 .userinfo-wrapper {
     display: table;
     margin: 0 auto;
+    margin-bottom: 6px!important;
+}
+.userinfo-wrapper img{
+    margin-right: 12px;
 }
 
 .form-submit-button {
@@ -147,6 +151,17 @@
     padding-right: 8px;
     padding-top: 8px;
     display: inline-block;
+}
+
+.tos {
+    text-align: center;
+    max-width: 800px;
+    left: 50%;
+    position: relative;
+    transform:translate(-50%,0%);
+    -ms-transform:translate(-50%,0%);
+    padding: 12px;
+    margin-top: 30px;
 }
 
 #cog {

@@ -15,7 +15,7 @@
         }
         else {
             echo "<div class='w3-right'>" .
-                    "<h2 class='w3-btn'><a href='registerLogin.php'>Logar ou Registrar</a></h2>" .
+                    "<h2><a class='link-branco' href='registerLogin.php'>Logar ou Registrar</a></h2>" .
                 "</div>";
         }
     ?>

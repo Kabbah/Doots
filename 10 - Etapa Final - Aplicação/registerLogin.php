@@ -9,6 +9,7 @@ session_start();
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
         
         <script>
             function changeTab(evt, cityName) {
@@ -104,7 +105,7 @@ session_start();
                 
                 <br/>
                 <input class="w3-check" type="checkbox" name="tos" required>
-                <label>Eu li e concordo com os <a href="#">Termos de Serviço</a></label>
+                <label>Eu li e concordo com os <a target="_blank" href="tos.php">Termos de Serviço</a></label>
                 
                 <br/>
                 <input class="w3-button w3-purple form-submit-button" type="submit" value="Registrar">

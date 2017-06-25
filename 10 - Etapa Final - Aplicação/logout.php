@@ -2,6 +2,6 @@
 session_start();
 
 if(session_destroy()) {
-    header("Location: registerLogin.php");
+    header("Location: index.php");
 }
 ?>
