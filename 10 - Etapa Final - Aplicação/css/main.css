@@ -134,4 +134,17 @@ html {
 }
 a {
     text-decoration: none;
+    color: purple;
+    /* Firefox */
+    -moz-transition: color 0.2s ease-in;
+    /* WebKit */
+    -webkit-transition: color 0.2s ease-in;
+    /* Opera */
+    -o-transition: color 0.2s ease-in;
+    /* Standard */
+    transition: color 0.2s ease-in;
+}
+
+a:hover {
+    color: #e600e6;
 }
