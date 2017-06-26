@@ -28,6 +28,8 @@ if($stmt->num_rows == 0 || $idUsuario != $_SESSION["id"]) {
 }
 $stmt->close();
 
+date_default_timezone_set("America/Sao_Paulo");
+
 $stmt = $conn->prepare("UPDATE Comentario SET conteudo = ?, editado = 1, dataHoraEdit = ? WHERE id = ?");
 $stmt->bind_param("sss", $_POST["commentText"], date("Y-m-d H:i:s"), $_POST["commentID"]);
 $stmt->execute();
