@@ -260,3 +260,7 @@ a:hover {
 #comentarios {
     max-width: 200px;
 }
+
+input[type=file] {
+    overflow: hidden;   
+}
